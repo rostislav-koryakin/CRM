@@ -2,7 +2,7 @@
 
 namespace CRM.Core.Entities
 {
-    public class Salesman
+    public class Salesman : BaseEntity
     {
         public int Id { get; set; }
 

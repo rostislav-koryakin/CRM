@@ -2,7 +2,7 @@
 
 namespace CRM.Core.Entities
 {
-    public class Deal
+    public class Deal : BaseEntity
     {
         public int Id { get; set; }
 
@@ -15,7 +15,9 @@ namespace CRM.Core.Entities
             New,
             Ongoing,
             Won,
-            Lost
+            Lost,
+            Invoiced,
+            Closed
         }
 
         public DealStage Stage { get; set; }
