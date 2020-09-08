@@ -8,4 +8,8 @@
     <Folder Include="Data\Config\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CRM.Core\CRM.Core.csproj" />
+  </ItemGroup>
+
 </Project>
