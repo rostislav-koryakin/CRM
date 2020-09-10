@@ -6,7 +6,7 @@ namespace CRM.Core.Entities
     {
         public int Id { get; set; }
 
-        public int TaxId {get; set;}
+        public int TaxpayerNumber {get; set;}
 
         public string Name { get; set; }
 
