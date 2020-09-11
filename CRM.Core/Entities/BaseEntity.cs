@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CRM.Core.Interfaces;
+using System;
 
 namespace CRM.Core.Entities
 {
-    public class BaseEntity
+    public class BaseEntity : ICreatedAndUpdatedDate
     {
         public int BaseEntityId { get; set; }
-        public DateTime AddedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }
