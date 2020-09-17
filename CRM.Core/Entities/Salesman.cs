@@ -4,7 +4,6 @@ namespace CRM.Core.Entities
 {
     public class Salesman : BaseEntity
     {
-        public int Id { get; set; }
 
         public string FirstName { get; set; }
 

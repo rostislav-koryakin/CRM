@@ -4,7 +4,6 @@ namespace CRM.Core.Entities
 {
     public class Deal : BaseEntity
     {
-        public int Id { get; set; }
 
         public string Name { get; set; }
 

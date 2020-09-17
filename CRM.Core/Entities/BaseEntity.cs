@@ -3,9 +3,9 @@ using System;
 
 namespace CRM.Core.Entities
 {
-    public class BaseEntity : ICreatedAndUpdatedDate
+    public abstract class BaseEntity : ICreatedAndUpdatedDate
     {
-        public int BaseEntityId { get; set; }
+        public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }

@@ -4,7 +4,6 @@ namespace CRM.Core.Entities
 {
     public class Company : BaseEntity
     {
-        public int Id { get; set; }
 
         public int TaxpayerNumber {get; set;}
 
