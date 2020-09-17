@@ -20,7 +20,7 @@ namespace CRM.Infrastructure.Data.Config
                 .HasValue<Salesman>(nameof(Salesman));
 
             entityTypeBuilder
-                .HasKey(e => e.BaseEntityId);
+                .HasKey(e => e.Id);
 
             entityTypeBuilder
                 .Property(e => e.CreatedDate)
