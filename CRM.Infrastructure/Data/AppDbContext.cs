@@ -49,6 +49,7 @@ namespace CRM.Infrastructure.Data
                     ((BaseEntity)entityEntry.Entity).CreatedDate = DateTime.Now;
                 }
             }
+
         }
     }
 }
