@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CRM.Infrastructure.Data
 {
-    class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
