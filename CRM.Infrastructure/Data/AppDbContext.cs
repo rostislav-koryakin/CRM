@@ -268,7 +268,6 @@ namespace CRM.Infrastructure.Data
                 );
         }
 
- 
         public override int SaveChanges()
         {
             SetBaseProperties();
