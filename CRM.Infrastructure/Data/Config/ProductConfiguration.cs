@@ -26,25 +26,25 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Product
                     {
-                        Id = 1,
+                        Id = 13,
                         Name = "Digital Marketing",
                         Price = 10000.0M
                     },
                     new Product
                     {
-                        Id = 2,
+                        Id = 14,
                         Name = "Branding",
                         Price = 20000.0M
                     },
                     new Product
                     {
-                        Id = 3,
+                        Id = 15,
                         Name = "Content Creation",
                         Price = 30000.0M
                     },
                     new Product
                     {
-                        Id = 4,
+                        Id = 16,
                         Name = "Strategic Planning",
                         Price = 40000.0M
                     }

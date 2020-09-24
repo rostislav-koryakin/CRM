@@ -40,8 +40,8 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Contact
                     {
-                        Id = 1,
-                        CompanyId = 1,
+                        Id = 7,
+                        CompanyId = 5,
                         FirstName = "Emma",
                         LastName = "Stone",
                         Email = "emma.stone@stones.com",
@@ -49,8 +49,8 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Contact
                     {
-                        Id = 2,
-                        CompanyId = 2,
+                        Id = 8,
+                        CompanyId = 6,
                         FirstName = "John",
                         LastName = "Newman",
                         Email = "john@newman.com",
@@ -58,8 +58,8 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Contact
                     {
-                        Id = 3,
-                        CompanyId = 2,
+                        Id = 9,
+                        CompanyId = 6,
                         FirstName = "Adam",
                         LastName = "Newman",
                         Email = "adam@newman.com",

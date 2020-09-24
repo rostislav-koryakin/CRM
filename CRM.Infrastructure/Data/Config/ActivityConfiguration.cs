@@ -48,8 +48,8 @@ namespace CRM.Infrastructure.Data.Config
                     new Activity
                     {
                         Id = 1,
-                        ContactId = 1,
-                        SalesmanId = 1,
+                        ContactId = 7,
+                        SalesmanId = 17,
                         Name = "Onboarding meeting",
                         StartDate = new DateTime(2020, 7, 16, 13, 30, 0),
                         EndDate = new DateTime(2020, 7, 16, 14, 30, 0),
@@ -59,8 +59,8 @@ namespace CRM.Infrastructure.Data.Config
                     new Activity
                     {
                         Id = 2,
-                        ContactId = 1,
-                        SalesmanId = 2,
+                        ContactId = 7,
+                        SalesmanId = 18,
                         Name = "Negotiation Call",
                         StartDate = new DateTime(2020, 7, 23, 7, 30, 0),
                         EndDate = new DateTime(2020, 7, 23, 8, 30, 0),
@@ -70,8 +70,8 @@ namespace CRM.Infrastructure.Data.Config
                     new Activity
                     {
                         Id = 3,
-                        ContactId = 2,
-                        SalesmanId = 3,
+                        ContactId = 8,
+                        SalesmanId = 19,
                         Name = "Onboarding call",
                         StartDate = new DateTime(2020, 7, 24, 11, 0, 0),
                         EndDate = new DateTime(2020, 7, 24, 13, 0, 0),
@@ -81,8 +81,8 @@ namespace CRM.Infrastructure.Data.Config
                     new Activity
                     {
                         Id = 4,
-                        ContactId = 3,
-                        SalesmanId = 4,
+                        ContactId = 9,
+                        SalesmanId = 20,
                         Name = "Negotiation meeting",
                         StartDate = new DateTime(2020, 7, 25, 13, 30, 0),
                         EndDate = new DateTime(2020, 7, 25, 15, 30, 0),

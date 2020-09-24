@@ -47,10 +47,10 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Deal
                     {
-                        Id = 1,
-                        CompanyId = 2,
-                        ContactId = 2,
-                        SalesmanId = 1,
+                        Id = 10,
+                        CompanyId = 6,
+                        ContactId = 9,
+                        SalesmanId = 17,
                         Name = "Newman Project",
                         TotalAmount = 1000000.0M,
                         Description = "Description",
@@ -58,10 +58,10 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Deal
                     {
-                        Id = 2,
-                        CompanyId = 1,
-                        ContactId = 1,
-                        SalesmanId = 2,
+                        Id = 11,
+                        CompanyId = 5,
+                        ContactId = 7,
+                        SalesmanId = 18,
                         Name = "The Stones Project X",
                         TotalAmount = 929301.0M,
                         Description = "Description",
@@ -69,10 +69,10 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Deal
                     {
-                        Id = 3,
-                        CompanyId = 1,
-                        ContactId = 1,
-                        SalesmanId = 4,
+                        Id = 12,
+                        CompanyId = 8,
+                        ContactId = 7,
+                        SalesmanId = 20,
                         Name = "The Stones Project Y",
                         TotalAmount = 20039499.0M,
                         Description = "Description",

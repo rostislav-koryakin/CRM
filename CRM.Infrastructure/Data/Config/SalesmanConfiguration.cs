@@ -34,7 +34,7 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Salesman
                     {
-                        Id = 1,
+                        Id = 17,
                         FirstName = "Lee",
                         LastName = "Johnes",
                         Email = "lee.johnes@sales.com",
@@ -42,7 +42,7 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Salesman
                     {
-                        Id = 2,
+                        Id = 18,
                         FirstName = "Amanda",
                         LastName = "Rodrigez",
                         Email = "amanda.rodrigez@sales.com",
@@ -50,7 +50,7 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Salesman
                     {
-                        Id = 3,
+                        Id = 19,
                         FirstName = "Emanuela",
                         LastName = "Kozminsky",
                         Email = "emanuela.kozminsky@sales.com",
@@ -58,7 +58,7 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Salesman
                     {
-                        Id = 4,
+                        Id = 20,
                         FirstName = "Ivo",
                         LastName = "Willson",
                         Email = "ivo.willson@sales.com",

@@ -38,7 +38,7 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Company
                     {
-                        Id = 1,
+                        Id = 5,
                         TaxpayerNumber = "9173848217",
                         Name = "The Stones",
                         City = "Portland",
@@ -47,7 +47,7 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Company
                     {
-                        Id = 2,
+                        Id = 6,
                         TaxpayerNumber = "34539292923",
                         Name = "Newman Corp.",
                         City = "New York",
