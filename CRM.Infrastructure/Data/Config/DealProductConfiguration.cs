@@ -24,37 +24,44 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new DealProduct
                     {
+                        Id = 21,
                         DealId = 10,
                         ProductId = 13
                     },
                     new DealProduct
                     {
+                        Id = 22,
                         DealId = 10,
                         ProductId = 14
                     },
                     new DealProduct
                     {
+                        Id = 23,
                         DealId = 10,
                         ProductId = 15
 
                     },
                     new DealProduct
                     {
+                        Id = 24,
                         DealId = 10,
                         ProductId = 16
                     },
                     new DealProduct
                     {
+                        Id = 25,
                         DealId = 11,
                         ProductId = 15
                     },
                     new DealProduct
                     {
+                        Id = 26,
                         DealId = 12,
                         ProductId = 13
                     },
                     new DealProduct
                     {
+                        Id = 27,
                         DealId = 12,
                         ProductId = 14
                     }
