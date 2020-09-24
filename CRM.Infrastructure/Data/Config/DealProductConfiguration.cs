@@ -9,9 +9,6 @@ namespace CRM.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<DealProduct> entityTypeBuilder)
         {
             entityTypeBuilder
-                .HasKey(dp => dp.Id);
-
-            entityTypeBuilder
                 .HasOne(dp => dp.Deal)
                 .WithMany(d => d.DealsProducts)
                 .HasForeignKey(dp => dp.DealId)

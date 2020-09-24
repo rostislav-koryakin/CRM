@@ -9,9 +9,6 @@ namespace CRM.Infrastructure.Data.Config
         public void Configure(EntityTypeBuilder<Product> entityTypeBuilder)
         {
             entityTypeBuilder
-                .HasKey(p => p.Id);
-
-            entityTypeBuilder
                 .Property(p => p.Name)
                 .IsRequired()
                 .HasColumnType("varchar(127)");

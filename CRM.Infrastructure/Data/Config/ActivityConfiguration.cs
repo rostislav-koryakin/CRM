@@ -9,8 +9,6 @@ namespace CRM.Infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Activity> entityTypeBuilder)
         {
-            entityTypeBuilder
-                .HasKey(a => a.Id);
 
             entityTypeBuilder
                 .Property(a => a.Name)
