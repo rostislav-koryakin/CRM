@@ -36,6 +36,28 @@ namespace CRM.Infrastructure.Data.Config
             entityTypeBuilder
                 .HasIndex(c => c.TaxpayerNumber)
                 .IsUnique();
+
+            entityTypeBuilder
+                .HasData(
+                    new Company
+                    {
+                        Id = 1,
+                        TaxpayerNumber = "9173848217",
+                        Name = "The Stones",
+                        City = "Portland",
+                        Street = "35",
+                        ZipCode = "3121"
+                    },
+                    new Company
+                    {
+                        Id = 2,
+                        TaxpayerNumber = "34539292923",
+                        Name = "Newman Corp.",
+                        City = "New York",
+                        Street = "5",
+                        ZipCode = "23232"
+                    }
+                );
         }
     }
 }

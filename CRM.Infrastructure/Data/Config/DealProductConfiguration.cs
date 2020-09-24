@@ -22,6 +22,46 @@ namespace CRM.Infrastructure.Data.Config
                 .WithMany(p => p.DealsProducts)
                 .HasForeignKey(dp => dp.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entityTypeBuilder
+                .HasData(
+                    new DealProduct
+                    {
+                        DealId = 1,
+                        ProductId = 1
+                    },
+                    new DealProduct
+                    {
+                        DealId = 1,
+                        ProductId = 2
+                    },
+                    new DealProduct
+                    {
+                        DealId = 1,
+                        ProductId = 3,
+
+                    },
+                    new DealProduct
+                    {
+                        DealId = 1,
+                        ProductId = 4
+                    },
+                    new DealProduct
+                    {
+                        DealId = 2,
+                        ProductId = 1
+                    },
+                    new DealProduct
+                    {
+                        DealId = 3,
+                        ProductId = 2
+                    },
+                    new DealProduct
+                    {
+                        DealId = 3,
+                        ProductId = 1
+                    }
+                );
         }
     }
 }

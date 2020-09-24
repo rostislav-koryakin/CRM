@@ -45,6 +45,43 @@ namespace CRM.Infrastructure.Data.Config
                 .WithMany(s => s.Deals)
                 .HasForeignKey(d => d.SalesmanId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entityTypeBuilder
+                .HasData(
+                    new Deal
+                    {
+                        Id = 1,
+                        CompanyId = 2,
+                        ContactId = 2,
+                        SalesmanId = 1,
+                        Name = "Newman Project",
+                        TotalAmount = 1000000.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.New
+                    },
+                    new Deal
+                    {
+                        Id = 2,
+                        CompanyId = 1,
+                        ContactId = 1,
+                        SalesmanId = 2,
+                        Name = "The Stones Project X",
+                        TotalAmount = 929301.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.Ongoing
+                    },
+                    new Deal
+                    {
+                        Id = 3,
+                        CompanyId = 1,
+                        ContactId = 1,
+                        SalesmanId = 4,
+                        Name = "The Stones Project Y",
+                        TotalAmount = 20039499.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.New
+                    }
+                );
         }
     }
 }

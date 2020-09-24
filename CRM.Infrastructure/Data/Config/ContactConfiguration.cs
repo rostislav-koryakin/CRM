@@ -38,6 +38,37 @@ namespace CRM.Infrastructure.Data.Config
 
             entityTypeBuilder
                 .HasIndex(c => new { c.FirstName, c.LastName });
+            
+            entityTypeBuilder
+                .HasData(
+                    new Contact
+                    {
+                        Id = 1,
+                        CompanyId = 1,
+                        FirstName = "Emma",
+                        LastName = "Stone",
+                        Email = "emma.stone@stones.com",
+                        Phone = "32131221311"
+                    },
+                    new Contact
+                    {
+                        Id = 2,
+                        CompanyId = 2,
+                        FirstName = "John",
+                        LastName = "Newman",
+                        Email = "john@newman.com",
+                        Phone = "123123123"
+                    },
+                    new Contact
+                    {
+                        Id = 3,
+                        CompanyId = 2,
+                        FirstName = "Adam",
+                        LastName = "Newman",
+                        Email = "adam@newman.com",
+                        Phone = "423123123"
+                    }
+                );
         }
     }
 }
