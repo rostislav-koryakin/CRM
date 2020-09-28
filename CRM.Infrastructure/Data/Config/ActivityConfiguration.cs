@@ -5,10 +5,11 @@ using System;
 
 namespace CRM.Infrastructure.Data.Config
 {
-    public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
+    public class ActivityConfiguration : BaseEntityConfiguration<Activity>
     {
-        public void Configure(EntityTypeBuilder<Activity> entityTypeBuilder)
+        public override void Configure(EntityTypeBuilder<Activity> entityTypeBuilder)
         {
+            base.Configure(entityTypeBuilder);
 
             entityTypeBuilder
                 .Property(a => a.Name)
@@ -48,44 +49,48 @@ namespace CRM.Infrastructure.Data.Config
                     new Activity
                     {
                         Id = 1,
-                        ContactId = 7,
-                        SalesmanId = 17,
+                        ContactId = 1,
+                        SalesmanId = 1,
                         Name = "Onboarding meeting",
-                        StartDate = new DateTime(2020, 7, 16, 13, 30, 0),
-                        EndDate = new DateTime(2020, 7, 16, 14, 30, 0),
+                        StartDate = new DateTime(2020, 10, 16, 13, 30, 0),
+                        EndDate = new DateTime(2020, 10, 16, 14, 30, 0),
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Description = "Description . . .",
                         Type = Activity.ActivityType.Meeting
                     },
                     new Activity
                     {
                         Id = 2,
-                        ContactId = 7,
-                        SalesmanId = 18,
+                        ContactId = 2,
+                        SalesmanId = 2,
                         Name = "Negotiation Call",
-                        StartDate = new DateTime(2020, 7, 23, 7, 30, 0),
-                        EndDate = new DateTime(2020, 7, 23, 8, 30, 0),
+                        StartDate = new DateTime(2020, 10, 23, 7, 30, 0),
+                        EndDate = new DateTime(2020, 10, 23, 8, 30, 0),
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Description = "Description . . .",
                         Type = Activity.ActivityType.Call
                     },
                     new Activity
                     {
                         Id = 3,
-                        ContactId = 8,
-                        SalesmanId = 19,
+                        ContactId = 3,
+                        SalesmanId = 3,
                         Name = "Onboarding call",
-                        StartDate = new DateTime(2020, 7, 24, 11, 0, 0),
-                        EndDate = new DateTime(2020, 7, 24, 13, 0, 0),
+                        StartDate = new DateTime(2020, 10, 24, 11, 0, 0),
+                        EndDate = new DateTime(2020, 10, 24, 13, 0, 0),
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Description = "Description . . .",
                         Type = Activity.ActivityType.Call
                     },
                     new Activity
                     {
                         Id = 4,
-                        ContactId = 9,
-                        SalesmanId = 20,
+                        ContactId = 2,
+                        SalesmanId = 3,
                         Name = "Negotiation meeting",
-                        StartDate = new DateTime(2020, 7, 25, 13, 30, 0),
-                        EndDate = new DateTime(2020, 7, 25, 15, 30, 0),
+                        StartDate = new DateTime(2020, 10, 25, 13, 30, 0),
+                        EndDate = new DateTime(2020, 10, 25, 15, 30, 0),
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Description = "Description . . .",
                         Type = Activity.ActivityType.Meeting
                     }

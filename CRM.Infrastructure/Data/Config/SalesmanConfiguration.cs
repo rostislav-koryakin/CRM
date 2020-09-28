@@ -1,13 +1,16 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace CRM.Infrastructure.Data.Config
 {
-    public class SalesmanConfiguration : IEntityTypeConfiguration<Salesman>
+    public class SalesmanConfiguration : BaseEntityConfiguration<Salesman>
     {
-        public void Configure(EntityTypeBuilder<Salesman> entityTypeBuilder)
+        public override void Configure(EntityTypeBuilder<Salesman> entityTypeBuilder)
         {
+            base.Configure(entityTypeBuilder);
+
             entityTypeBuilder
                 .Property(s => s.FirstName)
                 .IsRequired()
@@ -34,7 +37,8 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Salesman
                     {
-                        Id = 17,
+                        Id = 1,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Lee",
                         LastName = "Johnes",
                         Email = "lee.johnes@sales.com",
@@ -42,7 +46,8 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Salesman
                     {
-                        Id = 18,
+                        Id = 2,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Amanda",
                         LastName = "Rodrigez",
                         Email = "amanda.rodrigez@sales.com",
@@ -50,7 +55,8 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Salesman
                     {
-                        Id = 19,
+                        Id = 3,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Emanuela",
                         LastName = "Kozminsky",
                         Email = "emanuela.kozminsky@sales.com",
@@ -58,7 +64,8 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Salesman
                     {
-                        Id = 20,
+                        Id = 4,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Ivo",
                         LastName = "Willson",
                         Email = "ivo.willson@sales.com",

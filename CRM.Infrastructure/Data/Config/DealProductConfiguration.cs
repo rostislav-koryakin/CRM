@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRM.Infrastructure.Data.Config
 {
-    public class DealProductConfiguration : IEntityTypeConfiguration<DealProduct>
+    public class DealProductConfiguration : BaseEntityConfiguration<DealProduct>
     {
-        public void Configure(EntityTypeBuilder<DealProduct> entityTypeBuilder)
+        public override void Configure(EntityTypeBuilder<DealProduct> entityTypeBuilder)
         {
+            base.Configure(entityTypeBuilder);
+
             entityTypeBuilder
                 .HasOne(dp => dp.Deal)
                 .WithMany(d => d.DealsProducts)
@@ -24,46 +26,52 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new DealProduct
                     {
-                        Id = 21,
-                        DealId = 10,
-                        ProductId = 13
+                        Id = 1,
+                        DealId = 1,
+                        ProductId = 1
                     },
                     new DealProduct
                     {
-                        Id = 22,
-                        DealId = 10,
-                        ProductId = 14
+                        Id = 2,
+                        DealId = 1,
+                        ProductId = 2
                     },
                     new DealProduct
                     {
-                        Id = 23,
-                        DealId = 10,
-                        ProductId = 15
+                        Id = 3,
+                        DealId = 1,
+                        ProductId = 3
 
                     },
                     new DealProduct
                     {
-                        Id = 24,
-                        DealId = 10,
-                        ProductId = 16
+                        Id = 4,
+                        DealId = 1,
+                        ProductId = 4
                     },
                     new DealProduct
                     {
-                        Id = 25,
-                        DealId = 11,
-                        ProductId = 15
+                        Id = 5,
+                        DealId = 2,
+                        ProductId = 2
                     },
                     new DealProduct
                     {
-                        Id = 26,
-                        DealId = 12,
-                        ProductId = 13
+                        Id = 6,
+                        DealId = 3,
+                        ProductId = 3
                     },
                     new DealProduct
                     {
-                        Id = 27,
-                        DealId = 12,
-                        ProductId = 14
+                        Id = 7,
+                        DealId = 3,
+                        ProductId = 4
+                    },
+                    new DealProduct
+                    {
+                        Id = 8,
+                        DealId = 4,
+                        ProductId = 5
                     }
                 );
         }

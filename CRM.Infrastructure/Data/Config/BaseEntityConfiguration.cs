@@ -4,21 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CRM.Infrastructure.Data.Config
 {
-    public class BaseEntityConfiguration : IEntityTypeConfiguration<BaseEntity>
+    public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity
     {
-        public void Configure(EntityTypeBuilder<BaseEntity> entityTypeBuilder)
+        public virtual void Configure(EntityTypeBuilder<TEntity> entityTypeBuilder)
         {
-            entityTypeBuilder
-                .ToTable("BaseEntity")
-                .HasDiscriminator<string>("EntityType")
-                .HasValue<Activity>(nameof(Activity))
-                .HasValue<Company>(nameof(Company))
-                .HasValue<Contact>(nameof(Contact))
-                .HasValue<Deal>(nameof(Deal))
-                .HasValue<DealProduct>(nameof(DealProduct))
-                .HasValue<Product>(nameof(Product))
-                .HasValue<Salesman>(nameof(Salesman));
-
             entityTypeBuilder
                 .HasKey(e => e.Id);
 

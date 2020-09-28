@@ -1,13 +1,16 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace CRM.Infrastructure.Data.Config
 {
-    public class DealConfiguration : IEntityTypeConfiguration<Deal>
+    public class DealConfiguration : BaseEntityConfiguration<Deal>
     {
-        public void Configure(EntityTypeBuilder<Deal> entityTypeBuilder)
+        public override void Configure(EntityTypeBuilder<Deal> entityTypeBuilder)
         {
+            base.Configure(entityTypeBuilder);
+
             entityTypeBuilder
                 .Property(d => d.Name)
                 .IsRequired()
@@ -47,10 +50,11 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Deal
                     {
-                        Id = 10,
-                        CompanyId = 6,
-                        ContactId = 9,
-                        SalesmanId = 17,
+                        Id = 1,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 2,
+                        ContactId = 2,
+                        SalesmanId = 1,
                         Name = "Newman Project",
                         TotalAmount = 1000000.0M,
                         Description = "Description",
@@ -58,10 +62,11 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Deal
                     {
-                        Id = 11,
-                        CompanyId = 5,
-                        ContactId = 7,
-                        SalesmanId = 18,
+                        Id = 2,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 1,
+                        ContactId = 1,
+                        SalesmanId = 2,
                         Name = "The Stones Project X",
                         TotalAmount = 929301.0M,
                         Description = "Description",
@@ -69,12 +74,25 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new Deal
                     {
-                        Id = 12,
-                        CompanyId = 8,
-                        ContactId = 7,
-                        SalesmanId = 20,
+                        Id = 3,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 1,
+                        ContactId = 1,
+                        SalesmanId = 3,
                         Name = "The Stones Project Y",
                         TotalAmount = 20039499.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.New
+                    },
+                    new Deal
+                    {
+                        Id = 4,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 4,
+                        ContactId = 5,
+                        SalesmanId = 3,
+                        Name = "Mills & Johnes Rebranding Project",
+                        TotalAmount = 10000.0M,
                         Description = "Description",
                         Stage = Deal.DealStage.New
                     }

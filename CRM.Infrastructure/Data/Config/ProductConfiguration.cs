@@ -1,13 +1,16 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 
 namespace CRM.Infrastructure.Data.Config
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductConfiguration : BaseEntityConfiguration<Product>
     {
-        public void Configure(EntityTypeBuilder<Product> entityTypeBuilder)
+        public override void Configure(EntityTypeBuilder<Product> entityTypeBuilder)
         {
+            base.Configure(entityTypeBuilder);
+
             entityTypeBuilder
                 .Property(p => p.Name)
                 .IsRequired()
@@ -26,27 +29,38 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new Product
                     {
-                        Id = 13,
+                        Id = 1,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Digital Marketing",
                         Price = 10000.0M
                     },
                     new Product
                     {
-                        Id = 14,
+                        Id = 2,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Branding",
                         Price = 20000.0M
                     },
                     new Product
                     {
-                        Id = 15,
+                        Id = 3,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Content Creation",
                         Price = 30000.0M
                     },
                     new Product
                     {
-                        Id = 16,
+                        Id = 4,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Strategic Planning",
                         Price = 40000.0M
+                    },
+                    new Product
+                    {
+                        Id = 5,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        Name = "Rebranding",
+                        Price = 10000.0M
                     }
                 );
         }
