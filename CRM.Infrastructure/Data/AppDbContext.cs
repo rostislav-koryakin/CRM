@@ -1,8 +1,8 @@
 ﻿using CRM.Core.Entities;
+using CRM.Infrastructure.Data.Config;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Reflection;
 
 namespace CRM.Infrastructure.Data
 {
@@ -13,7 +13,6 @@ namespace CRM.Infrastructure.Data
 
         }
         public DbSet<Activity> Activities { get; set; }
-        public DbSet<BaseEntity> BaseEntities { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Deal> Deals { get; set; }
@@ -23,7 +22,15 @@ namespace CRM.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new ActivityConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+            modelBuilder.ApplyConfiguration(new ContactConfiguration());
+            modelBuilder.ApplyConfiguration(new DealConfiguration());
+            modelBuilder.ApplyConfiguration(new DealProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new SalesmanConfiguration());
         }
 
         public override int SaveChanges()
