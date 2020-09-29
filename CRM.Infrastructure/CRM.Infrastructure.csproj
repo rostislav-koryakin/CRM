@@ -16,8 +16,4 @@
     <ProjectReference Include="..\CRM.Core\CRM.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Migrations\" />
-  </ItemGroup>
-
 </Project>
