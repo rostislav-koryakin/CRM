@@ -8,27 +8,25 @@ namespace CRM.Infrastructure.Data
     class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly AppDbContext _dbContext;
-        private DbSet<T> _entities;
         
         public EfRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
-            _entities = _dbContext.Set<T>();
         }
 
         public IEnumerable<T> GetAll()
         {
-            return _entities.AsEnumerable();
+            return _dbContext.Set<T>().AsEnumerable();
         }
 
         public T GetById(int id)
         {
-            return _entities.SingleOrDefault(e => e.Id == id);
+            return _dbContext.Set<T>().SingleOrDefault(e => e.Id == id);
         }
 
         public void Add(T entity)
         {
-            _entities.Add(entity);
+            _dbContext.Set<T>().Add(entity);
             SaveChanges();
 
         }
@@ -40,7 +38,7 @@ namespace CRM.Infrastructure.Data
         }
         public void Delete(T entity)
         {
-            _entities.Remove(entity);
+            _dbContext.Set<T>().Remove(entity);
             SaveChanges();
         }
 
