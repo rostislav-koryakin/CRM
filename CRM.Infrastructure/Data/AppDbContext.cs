@@ -3,6 +3,8 @@ using CRM.Infrastructure.Data.Config;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CRM.Infrastructure.Data
 {
@@ -33,10 +35,11 @@ namespace CRM.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new SalesmanConfiguration());
         }
 
-        public override int SaveChanges()
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             SetBaseProperties();
-            return base.SaveChanges();
+            return result;
         }
 
         public void SetBaseProperties()
