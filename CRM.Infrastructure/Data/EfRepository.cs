@@ -1,11 +1,14 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace CRM.Infrastructure.Data
 {
-    class EfRepository<T> : IRepository<T> where T : BaseEntity
+    public class EfRepository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly AppDbContext _dbContext;
         
@@ -14,37 +17,38 @@ namespace CRM.Infrastructure.Data
             _dbContext = dbContext;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<List<T>> GetAllAsync()
         {
-            return _dbContext.Set<T>().AsEnumerable();
+            return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public async Task<List<T>> GetByConditionAsync(Expression<Func<T, bool>> expression)
         {
-            return _dbContext.Set<T>().SingleOrDefault(e => e.Id == id);
+            return await _dbContext.Set<T>()
+                .Where(expression)
+                .ToListAsync();
         }
 
-        public void Add(T entity)
+        public async Task<T> CreateAsync(T entity)
         {
-            _dbContext.Set<T>().Add(entity);
-            SaveChanges();
+            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+
+            return entity;
 
         }
-        public void Update(T entity)
+
+        public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
         }
-        public void Delete(T entity)
+
+        public async Task DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
-            SaveChanges();
-        }
-
-        public void SaveChanges()
-        {
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
