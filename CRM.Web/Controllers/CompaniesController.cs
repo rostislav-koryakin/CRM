@@ -20,9 +20,51 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Companies
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Companies.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["TaxpayerNumberSortParm"] = sortOrder == "TaxpayerNumber" ? "taxpayer_number_desc" : "TaxpayerNumber";
+            ViewData["CitySortParm"] = sortOrder == "City" ? "city_desc" : "City";
+            ViewData["StreetSortParm"] = sortOrder == "Street" ? "street_desc" : "Street";
+            ViewData["ZipCodeSortParm"] = sortOrder == "ZipCode" ? "zip_code_desc" : "ZipCode";
+
+            var appDbContext = _context.Companies.AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    appDbContext = appDbContext.OrderByDescending(c => c.Name);
+                    break;
+                case "TaxpayerNumber":
+                    appDbContext = appDbContext.OrderBy(c => c.TaxpayerNumber);
+                    break;
+                case "taxpayer_number_desc":
+                    appDbContext = appDbContext.OrderByDescending(c => c.TaxpayerNumber);
+                    break;
+                case "City":
+                    appDbContext = appDbContext.OrderBy(c => c.City);
+                    break;
+                case "city_desc":
+                    appDbContext = appDbContext.OrderByDescending(c => c.City);
+                    break;
+                case "Street":
+                    appDbContext = appDbContext.OrderBy(c => c.Street);
+                    break;
+                case "street_desc":
+                    appDbContext = appDbContext.OrderByDescending(c => c.Street);
+                    break;
+                case "ZipCode":
+                    appDbContext = appDbContext.OrderBy(c => c.ZipCode);
+                    break;
+                case "zip_code_desc":
+                    appDbContext = appDbContext.OrderByDescending(c => c.ZipCode);
+                    break;
+                default:
+                    appDbContext = appDbContext.OrderBy(c => c.Name);
+                    break;
+            }
+
+            return View(await appDbContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Companies/Details/5

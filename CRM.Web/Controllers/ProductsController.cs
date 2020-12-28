@@ -20,9 +20,30 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Products.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            var appDbContext = _context.Products.AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    appDbContext = appDbContext.OrderByDescending(p => p.Name);
+                    break;
+                case "Price":
+                    appDbContext = appDbContext.OrderBy(p => p.Price);
+                    break;
+                case "price_desc":
+                    appDbContext = appDbContext.OrderByDescending(p => p.Price);
+                    break;
+                default:
+                    appDbContext = appDbContext.OrderBy(p => p.Name);
+                    break;
+            }
+
+            return View(await appDbContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Products/Details/5

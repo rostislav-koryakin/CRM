@@ -20,10 +20,58 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Deals
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var appDbContext = _context.Deals.Include(d => d.Company).Include(d => d.Contact).Include(d => d.Salesman);
-            return View(await appDbContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["TotalAmountSortParm"] = sortOrder == "TotalAmount" ? "total_amount_desc" : "TotalAmount";
+            ViewData["StageSortParm"] = sortOrder == "Stage" ? "stage_desc" : "Stage";
+            ViewData["ContactSortParm"] = sortOrder == "Contact" ? "contact_desc" : "Contact";
+            ViewData["CompanySortParm"] = sortOrder == "Company" ? "company_desc" : "Company";
+            ViewData["SalesmanSortParm"] = sortOrder == "Salesman" ? "salesman_desc" : "Salesman";
+
+            var appDbContext = _context.Deals.Include(d => d.Company).Include(d => d.Contact).Include(d => d.Salesman).AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    appDbContext = appDbContext.OrderByDescending(d => d.Name);
+                    break;
+                case "TotalAmount":
+                    appDbContext = appDbContext.OrderBy(d => d.TotalAmount);
+                    break;
+                case "total_amount_desc":
+                    appDbContext = appDbContext.OrderByDescending(d => d.TotalAmount);
+                    break;
+                case "Stage":
+                    appDbContext = appDbContext.OrderBy(d => d.Stage);
+                    break;
+                case "stage_desc":
+                    appDbContext = appDbContext.OrderByDescending(d => d.Stage);
+                    break;
+                case "Contact":
+                    appDbContext = appDbContext.OrderBy(d => d.Contact.Email);
+                    break;
+                case "contact_desc":
+                    appDbContext = appDbContext.OrderByDescending(d => d.Contact.Email);
+                    break;
+                case "Company":
+                    appDbContext = appDbContext.OrderBy(d => d.Company.Name);
+                    break;
+                case "company_desc":
+                    appDbContext = appDbContext.OrderByDescending(d => d.Company.Name);
+                    break;
+                case "Salesman":
+                    appDbContext = appDbContext.OrderBy(d => d.Salesman.Email);
+                    break;
+                case "salesman_desc":
+                    appDbContext = appDbContext.OrderByDescending(d => d.Salesman.Email);
+                    break;
+                default:
+                    appDbContext = appDbContext.OrderBy(d => d.Name);
+                    break;
+            }
+
+            return View(await appDbContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Deals/Details/5

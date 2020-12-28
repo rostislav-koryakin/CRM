@@ -20,9 +20,44 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Salesmen
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Salesmen.ToListAsync());
+            ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
+            ViewData["LastNameSortParm"] = sortOrder == "LastName" ? "last_name_desc" : "LastName";
+            ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "phone_desc" : "Phone";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+
+            var appDbContext = _context.Salesmen.AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "first_name_desc":
+                    appDbContext = appDbContext.OrderByDescending(s => s.FirstName);
+                    break;
+                case "LastName":
+                    appDbContext = appDbContext.OrderBy(s => s.LastName);
+                    break;
+                case "last_name_desc":
+                    appDbContext = appDbContext.OrderByDescending(s => s.LastName);
+                    break;
+                case "Phone":
+                    appDbContext = appDbContext.OrderBy(s => s.Phone);
+                    break;
+                case "phone_desc":
+                    appDbContext = appDbContext.OrderByDescending(s => s.Phone);
+                    break;
+                case "Email":
+                    appDbContext = appDbContext.OrderBy(s => s.Email);
+                    break;
+                case "email_desc":
+                    appDbContext = appDbContext.OrderByDescending(s => s.Email);
+                    break;
+                default:
+                    appDbContext = appDbContext.OrderBy(s => s.FirstName);
+                    break;
+            }
+
+            return View(await appDbContext.AsNoTracking().ToListAsync());
         }
 
         // GET: Salesmen/Details/5
