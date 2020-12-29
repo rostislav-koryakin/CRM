@@ -20,12 +20,18 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Products.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                appDbContext = appDbContext.Where(p => p.Name.Contains(searchString));
+            }
 
             switch (sortOrder)
             {

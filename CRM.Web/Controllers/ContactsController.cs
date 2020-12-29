@@ -20,15 +20,24 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Contacts
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
             ViewData["LastNameSortParm"] = sortOrder == "LastName" ? "last_name_desc" : "LastName";
             ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "phone_desc" : "Phone";
             ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
             ViewData["CompanySortParm"] = sortOrder == "Company" ? "company_desc" : "Company";
+            ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Contacts.Include(c => c.Company).AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                appDbContext = appDbContext.Where(c => c.FirstName.Contains(searchString)
+                                                    || c.LastName.Contains(searchString)
+                                                    || c.Email.Contains(searchString)
+                                                    || c.Company.Name.Contains(searchString));
+            }
 
             switch (sortOrder)
             {
