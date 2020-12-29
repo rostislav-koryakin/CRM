@@ -20,13 +20,24 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Contacts
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
             ViewData["LastNameSortParm"] = sortOrder == "LastName" ? "last_name_desc" : "LastName";
             ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "phone_desc" : "Phone";
             ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
             ViewData["CompanySortParm"] = sortOrder == "Company" ? "company_desc" : "Company";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Contacts.Include(c => c.Company).AsQueryable();
@@ -73,7 +84,8 @@ namespace CRM.Web.Controllers
                     break;
             }
 
-            return View(await appDbContext.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Contact>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Contacts/Details/5

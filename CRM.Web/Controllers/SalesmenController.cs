@@ -20,12 +20,23 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Salesmen
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["FirstNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
             ViewData["LastNameSortParm"] = sortOrder == "LastName" ? "last_name_desc" : "LastName";
             ViewData["PhoneSortParm"] = sortOrder == "Phone" ? "phone_desc" : "Phone";
             ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Salesmen.AsQueryable();
@@ -65,7 +76,8 @@ namespace CRM.Web.Controllers
                     break;
             }
 
-            return View(await appDbContext.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Salesman>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Salesmen/Details/5

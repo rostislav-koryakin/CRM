@@ -20,14 +20,25 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Deals
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["TotalAmountSortParm"] = sortOrder == "TotalAmount" ? "total_amount_desc" : "TotalAmount";
             ViewData["StageSortParm"] = sortOrder == "Stage" ? "stage_desc" : "Stage";
             ViewData["ContactSortParm"] = sortOrder == "Contact" ? "contact_desc" : "Contact";
             ViewData["CompanySortParm"] = sortOrder == "Company" ? "company_desc" : "Company";
             ViewData["SalesmanSortParm"] = sortOrder == "Salesman" ? "salesman_desc" : "Salesman";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Deals.Include(d => d.Company).Include(d => d.Contact).Include(d => d.Salesman).AsQueryable();
@@ -80,7 +91,8 @@ namespace CRM.Web.Controllers
                     break;
             }
 
-            return View(await appDbContext.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Deal>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Deals/Details/5

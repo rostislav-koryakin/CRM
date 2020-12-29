@@ -20,10 +20,21 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Products.AsQueryable();
@@ -49,7 +60,8 @@ namespace CRM.Web.Controllers
                     break;
             }
 
-            return View(await appDbContext.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Product>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Products/Details/5

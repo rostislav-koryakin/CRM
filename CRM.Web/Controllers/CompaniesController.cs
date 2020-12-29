@@ -20,13 +20,24 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Companies
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["TaxpayerNumberSortParm"] = sortOrder == "TaxpayerNumber" ? "taxpayer_number_desc" : "TaxpayerNumber";
             ViewData["CitySortParm"] = sortOrder == "City" ? "city_desc" : "City";
             ViewData["StreetSortParm"] = sortOrder == "Street" ? "street_desc" : "Street";
             ViewData["ZipCodeSortParm"] = sortOrder == "ZipCode" ? "zip_code_desc" : "ZipCode";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
 
             var appDbContext = _context.Companies.AsQueryable();
@@ -72,7 +83,8 @@ namespace CRM.Web.Controllers
                     break;
             }
 
-            return View(await appDbContext.AsNoTracking().ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<Company>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Companies/Details/5
