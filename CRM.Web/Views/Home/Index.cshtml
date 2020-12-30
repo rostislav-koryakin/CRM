@@ -2,7 +2,86 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+        Chart showing a sales funnel. A funnel chart is often used to visualize
+        data from stages of a process. Readers can quickly identify bottlenecks
+        in the process by comparing the area size variation of each stage.
+    </p>
+</figure>
+
+<script>
+    $(document).ready(function () {
+        $.getJSON("/Home/GetDeals", function (data) {
+            var Groups = [];
+            for (var i = 0; i < data.length; i++) {
+                Groups.push([data[i].stageName, data[i].stageTotalAmount]); 
+            }
+            console.log(Groups); 
+
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'funnel'
+                },
+                title: {
+                    text: 'Sales funnel'
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b> ({point.y:,.0f})',
+                            softConnector: true
+                        },
+                        center: ['40%', '50%'],
+                        neckWidth: '30%',
+                        neckHeight: '25%',
+                        width: '80%'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Unique users',
+                    data: Groups
+                    ////////////
+                    //[
+                    //    ['Website visits', 15654],
+                    //    ['Downloads', 4064],
+                    //    ['Requested price list', 1987],
+                    //    ['Invoice sent', 976],
+                    //    ['Finalized', 846]
+                    //]
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            plotOptions: {
+                                series: {
+                                    dataLabels: {
+                                        inside: true
+                                    },
+                                    center: ['50%', '50%'],
+                                    width: '100%'
+                                }
+                            }
+                        }
+                    }]
+                }
+            });
+        });
+    });
+</script>

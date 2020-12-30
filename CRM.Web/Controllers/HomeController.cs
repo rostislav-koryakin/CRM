@@ -6,21 +6,34 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CRM.Web.Models;
+using CRM.Infrastructure.Data;
 
 namespace CRM.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _context;
+
+        public HomeController(ILogger<HomeController> logger, AppDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult GetDeals()
+        {
+            var deals = _context.Deals
+                .GroupBy(d => d.Stage)
+                .Select(g => new { stageName = g.Key.ToString(), stageTotalAmount = g.Sum(d => d.TotalAmount) });
+
+            return new JsonResult(deals);
         }
 
         public IActionResult Privacy()
