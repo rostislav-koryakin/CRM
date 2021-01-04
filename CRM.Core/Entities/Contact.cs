@@ -3,8 +3,7 @@
 namespace CRM.Core.Entities
 {
     public class Contact : BaseEntity
-    {
-
+    { 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -12,6 +11,23 @@ namespace CRM.Core.Entities
         public string Phone { get; set; }
 
         public string Email { get; set; }
+
+        public string Position { get; set; }
+
+        public string Description { get; set; }
+
+        public enum Sources
+        {
+            Blog,
+            Calls,
+            Social_Media,
+            Marketing,
+            Events,
+            Referrals,
+            Website
+        }
+
+        public Sources Source { get; set; }
 
         public virtual Company Company { get; set; }
 

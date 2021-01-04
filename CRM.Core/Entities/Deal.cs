@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CRM.Core.Entities
 {
     public class Deal : BaseEntity
     {
-
         public string Name { get; set; }
 
         public decimal TotalAmount { get; set; }
 
+        public string Description { get; set; }
+
+        public DateTime? ClosingDate { get; set; }
+
         public enum DealStage
         {
             New,
-            Ongoing,
+            Analisis,
+            Offer,
+            Negotiation,
             Won,
             Lost,
             Invoiced,
@@ -20,8 +26,6 @@ namespace CRM.Core.Entities
         }
 
         public DealStage Stage { get; set; }
-
-        public string Description { get; set; }
 
         public virtual Contact Contact { get; set; }
 

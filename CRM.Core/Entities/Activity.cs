@@ -4,7 +4,6 @@ namespace CRM.Core.Entities
 {
     public class Activity : BaseEntity
     {
-
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -16,7 +15,8 @@ namespace CRM.Core.Entities
         public enum ActivityType
         {
             Call,
-            Meeting
+            Meeting,
+            Task
         }
 
         public ActivityType Type { get; set; }
@@ -28,6 +28,5 @@ namespace CRM.Core.Entities
         public virtual Salesman Salesman { get; set; }
 
         public virtual int SalesmanId { get; set; }
-
     }
 }
