@@ -11,6 +11,10 @@ namespace CRM.Infrastructure.Data.Config
             base.Configure(entityTypeBuilder);
 
             entityTypeBuilder
+                .Property(dp => dp.Quantity)
+                .IsRequired();
+
+            entityTypeBuilder
                 .HasOne(dp => dp.Deal)
                 .WithMany(d => d.DealsProducts)
                 .HasForeignKey(dp => dp.DealId)

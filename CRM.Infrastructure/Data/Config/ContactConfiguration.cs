@@ -31,6 +31,18 @@ namespace CRM.Infrastructure.Data.Config
                 .HasColumnType("varchar(127)");
 
             entityTypeBuilder
+                .Property(c => c.Position)
+                .HasColumnType("varchar(127)");
+
+            entityTypeBuilder
+                .Property(c => c.Description)
+                .HasColumnType("varchar(255)");
+
+            entityTypeBuilder
+                .Property(c => c.Source)
+                .HasConversion<string>();
+
+            entityTypeBuilder
                 .HasOne(c => c.Company)
                 .WithMany(c => c.Contacts)
                 .HasForeignKey(c => c.CompanyId)

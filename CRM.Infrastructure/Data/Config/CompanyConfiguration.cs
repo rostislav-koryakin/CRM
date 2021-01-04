@@ -22,6 +22,21 @@ namespace CRM.Infrastructure.Data.Config
                 .HasColumnType("varchar(127)");
 
             entityTypeBuilder
+                .Property(c => c.Website)
+                .HasColumnType("varchar(127)");
+
+            entityTypeBuilder
+                .Property(c => c.NoOfEmployees);
+
+            entityTypeBuilder
+                .Property(c => c.Industry)
+                .HasConversion<string>();
+
+            entityTypeBuilder
+                .Property(c => c.Country)
+                .HasColumnType("varchar(127)");
+
+            entityTypeBuilder
                 .Property(c => c.City)
                 .HasColumnType("varchar(127)");
 
@@ -32,6 +47,10 @@ namespace CRM.Infrastructure.Data.Config
             entityTypeBuilder
                 .Property(c => c.ZipCode)
                 .HasColumnType("varchar(15)");
+
+            entityTypeBuilder
+                .Property(c => c.Score)
+                .HasDefaultValue(0);
 
             entityTypeBuilder
                 .HasIndex(c => c.TaxpayerNumber)

@@ -21,6 +21,14 @@ namespace CRM.Infrastructure.Data.Config
                 .HasColumnType("decimal(18, 2)");
 
             entityTypeBuilder
+                .Property(d => d.Description)
+                .HasColumnType("varchar(255)");
+
+            entityTypeBuilder
+                .Property(d => d.ClosingDate)
+                .HasColumnName("Closing Date");
+
+            entityTypeBuilder
                 .Property(d => d.Stage)
                 .HasConversion<string>();
 
@@ -70,7 +78,7 @@ namespace CRM.Infrastructure.Data.Config
                         Name = "The Stones Project X",
                         TotalAmount = 929301.0M,
                         Description = "Description",
-                        Stage = Deal.DealStage.Ongoing
+                        Stage = Deal.DealStage.Analisis
                     },
                     new Deal
                     {
