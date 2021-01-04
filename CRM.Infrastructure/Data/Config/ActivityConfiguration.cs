@@ -36,13 +36,13 @@ namespace CRM.Infrastructure.Data.Config
                 .HasOne(a => a.Contact)
                 .WithMany(c => c.Activities)
                 .HasForeignKey(a => a.ContactId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entityTypeBuilder
                 .HasOne(a => a.Salesman)
                 .WithMany(s => s.Activities)
                 .HasForeignKey(a => a.SalesmanId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             
             entityTypeBuilder
                 .HasData(
