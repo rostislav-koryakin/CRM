@@ -41,7 +41,7 @@ namespace CRM.Infrastructure.Data.Config
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Lee",
                         LastName = "Johnes",
-                        Email = "lee.johnes@sales.com",
+                        Email = "lee.johnes@sales.c",
                         Phone = "500500500"
                     },
                     new Salesman
@@ -50,7 +50,7 @@ namespace CRM.Infrastructure.Data.Config
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Amanda",
                         LastName = "Rodrigez",
-                        Email = "amanda.rodrigez@sales.com",
+                        Email = "amanda.rodrigez@sales.c",
                         Phone = "100100100"
                     },
                     new Salesman
@@ -59,7 +59,7 @@ namespace CRM.Infrastructure.Data.Config
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Emanuela",
                         LastName = "Kozminsky",
-                        Email = "emanuela.kozminsky@sales.com",
+                        Email = "emanuela.kozminsky@sales.c",
                         Phone = "200200200"
                     },
                     new Salesman
@@ -68,8 +68,26 @@ namespace CRM.Infrastructure.Data.Config
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         FirstName = "Ivo",
                         LastName = "Willson",
-                        Email = "ivo.willson@sales.com",
+                        Email = "ivo.willson@sales.c",
                         Phone = "300300300"
+                    },
+                    new Salesman
+                    {
+                        Id = 5,
+                        CreatedDate = new DateTime(2021, 1, 2, 8, 30, 0),
+                        FirstName = "Daniel",
+                        LastName = "Portman",
+                        Email = "daniel.portman@sales.c",
+                        Phone = "300200300"
+                    },
+                    new Salesman
+                    {
+                        Id = 6,
+                        CreatedDate = new DateTime(2021, 1, 2, 8, 30, 0),
+                        FirstName = "Anna",
+                        LastName = "Petersen",
+                        Email = "anna.petersen@sales.c",
+                        Phone = "300100300"
                     }
                 );
         }

@@ -60,8 +60,10 @@ namespace CRM.Infrastructure.Data.Config
                         CompanyId = 1,
                         FirstName = "Emma",
                         LastName = "Stone",
-                        Email = "emma.stone@stones.com",
-                        Phone = "32131221311"
+                        Email = "emma.stone@stones.c",
+                        Phone = "32131221311",
+                        Position = "CEO",
+                        Source = Contact.Sources.Blog
                     },
                     new Contact
                     {
@@ -70,8 +72,10 @@ namespace CRM.Infrastructure.Data.Config
                         CompanyId = 2,
                         FirstName = "John",
                         LastName = "Newman",
-                        Email = "john@newman.com",
-                        Phone = "123123123"
+                        Email = "john@newman.c",
+                        Phone = "123123123",
+                        Position = "CTO",
+                        Source = Contact.Sources.Blog
                     },
                     new Contact
                     {
@@ -80,8 +84,10 @@ namespace CRM.Infrastructure.Data.Config
                         CompanyId = 2,
                         FirstName = "Adam",
                         LastName = "Newman",
-                        Email = "adam@newman.com",
-                        Phone = "423123123"
+                        Email = "adam@newman.c",
+                        Phone = "423123123",
+                        Position = "Sales Rep",
+                        Source = Contact.Sources.Website
                     },
                     new Contact
                     {
@@ -90,8 +96,10 @@ namespace CRM.Infrastructure.Data.Config
                         CompanyId = 3,
                         FirstName = "Michel",
                         LastName = "Mech",
-                        Email = "michel@tech-mech.com",
-                        Phone = "34525234"
+                        Email = "michel@tech-mech.c",
+                        Phone = "34525234",
+                        Position = "Sales Rep",
+                        Source = Contact.Sources.Marketing
                     },
                     new Contact
                     {
@@ -100,8 +108,10 @@ namespace CRM.Infrastructure.Data.Config
                         CompanyId = 4,
                         FirstName = "Abel",
                         LastName = "Mills",
-                        Email = "abel@mills-johnes.com",
-                        Phone = "76432342"
+                        Email = "abel@mills-johnes.c",
+                        Phone = "76432342",
+                        Position = "Sales Rep",
+                        Source = Contact.Sources.Marketing
                     },
                     new Contact
                     {
@@ -110,8 +120,35 @@ namespace CRM.Infrastructure.Data.Config
                         CompanyId = 4,
                         FirstName = "Kate",
                         LastName = "Johnes",
-                        Email = "kate@mills-johnes.com",
-                        Phone = "76432341"
+                        Email = "kate@mills-johnes.c",
+                        Phone = "76432341",
+                        Position = "Sales Rep",
+                        Source = Contact.Sources.Events,
+                        Description = "Desc . . ."
+                    },
+                    new Contact
+                    {
+                        Id = 7,
+                        CreatedDate = new DateTime(2021, 1, 2, 8, 30, 0),
+                        CompanyId = 5,
+                        FirstName = "Jane",
+                        LastName = "Coyre",
+                        Email = "jane@gitcm.c",
+                        Phone = "76432347",
+                        Position = "Sales Rep",
+                        Source = Contact.Sources.Marketing
+                    },
+                    new Contact
+                    {
+                        Id = 8,
+                        CreatedDate = new DateTime(2021, 1, 2, 8, 30, 0),
+                        CompanyId = 6,
+                        FirstName = "Georgina",
+                        LastName = "Murray",
+                        Email = "georgina@prec-clinic.c",
+                        Phone = "76432348",
+                        Position = "Sales Rep",
+                        Source = Contact.Sources.Marketing
                     }
                 );
         }

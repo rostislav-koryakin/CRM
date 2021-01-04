@@ -30,18 +30,21 @@ namespace CRM.Infrastructure.Data.Config
                 .HasData(
                     new DealProduct
                     {
+                        Quantity = 2,
                         Id = 1,
                         DealId = 1,
                         ProductId = 1
                     },
                     new DealProduct
                     {
+                        Quantity = 1,
                         Id = 2,
                         DealId = 1,
                         ProductId = 2
                     },
                     new DealProduct
                     {
+                        Quantity = 3,
                         Id = 3,
                         DealId = 1,
                         ProductId = 3
@@ -49,30 +52,35 @@ namespace CRM.Infrastructure.Data.Config
                     },
                     new DealProduct
                     {
+                        Quantity = 1,
                         Id = 4,
                         DealId = 1,
                         ProductId = 4
                     },
                     new DealProduct
                     {
+                        Quantity = 2,
                         Id = 5,
                         DealId = 2,
                         ProductId = 2
                     },
                     new DealProduct
                     {
+                        Quantity = 3,
                         Id = 6,
                         DealId = 3,
                         ProductId = 3
                     },
                     new DealProduct
                     {
+                        Quantity = 3,
                         Id = 7,
                         DealId = 3,
                         ProductId = 4
                     },
                     new DealProduct
                     {
+                        Quantity = 3,
                         Id = 8,
                         DealId = 4,
                         ProductId = 5

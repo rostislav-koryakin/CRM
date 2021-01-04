@@ -90,7 +90,7 @@ namespace CRM.Infrastructure.Data.Config
                         Name = "The Stones Project Y",
                         TotalAmount = 20039499.0M,
                         Description = "Description",
-                        Stage = Deal.DealStage.New
+                        Stage = Deal.DealStage.Offer
                     },
                     new Deal
                     {
@@ -102,7 +102,56 @@ namespace CRM.Infrastructure.Data.Config
                         Name = "Mills & Johnes Rebranding Project",
                         TotalAmount = 10000.0M,
                         Description = "Description",
-                        Stage = Deal.DealStage.New
+                        Stage = Deal.DealStage.Negotiation
+                    },
+                    new Deal
+                    {
+                        Id = 5,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 2,
+                        ContactId = 2,
+                        SalesmanId = 3,
+                        Name = "Newman Project2",
+                        TotalAmount = 1000000.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.Negotiation
+                    },
+                    new Deal
+                    {
+                        Id = 6,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 2,
+                        ContactId = 2,
+                        SalesmanId = 1,
+                        Name = "Newman Project3",
+                        TotalAmount = 1000000.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.Won
+                    },
+                    new Deal
+                    {
+                        Id = 7,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 2,
+                        ContactId = 2,
+                        SalesmanId = 1,
+                        Name = "Newman Project4",
+                        TotalAmount = 1000000.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.Invoiced
+                    },
+                    new Deal
+                    {
+                        Id = 8,
+                        CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
+                        CompanyId = 2,
+                        ContactId = 2,
+                        SalesmanId = 1,
+                        Name = "Newman Project5",
+                        TotalAmount = 1000000.0M,
+                        Description = "Description",
+                        Stage = Deal.DealStage.Closed,
+                        ClosingDate = new DateTime(2021, 1, 1, 8, 30, 0)
                     }
                 );
         }
