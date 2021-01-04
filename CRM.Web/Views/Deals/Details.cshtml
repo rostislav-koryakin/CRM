@@ -1,4 +1,4 @@
-﻿@model CRM.Core.Entities.Deal
+﻿@model CRM.Web.ViewModels.DealProductsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,63 +11,98 @@
     <h4>Deal</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.Name)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalAmount)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.TotalAmount)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalAmount)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.TotalAmount)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Stage)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.Stage)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Stage)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.Stage)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.Description)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.Description)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Contact)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.Contact)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Contact.Email)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.Contact.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.Company)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Company.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.Company.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Salesman)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.Salesman)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Salesman.Email)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.Salesman.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.CreatedDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.CreatedDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedDate)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Deal.UpdatedDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.UpdatedDate)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Deal.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div>
+<div>
+    <h4>Related Products</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a>Name</a>
+                </th>
+                <th>
+                    <a>Unit Price</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DealProducts)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.Price)
+                    </td>
+                    <td>
+                        <a asp-controller="DealProducts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-controller="DealProducts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-controller="DealProducts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

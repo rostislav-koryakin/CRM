@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.ViewModels;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace CRM.Web.Controllers
 {
@@ -96,25 +98,35 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Deals/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            DealProductsViewModel dealProductsViewModel = new DealProductsViewModel();
+            dealProductsViewModel.Deal = GetDeal(id);
+            dealProductsViewModel.DealProducts = GetDealProducts(id);
 
-            var deal = await _context.Deals
+            return View(dealProductsViewModel);
+        }
+
+        public Deal GetDeal(int? id)
+        {
+            var deal =  _context.Deals
                 .Include(d => d.Company)
                 .Include(d => d.Contact)
                 .Include(d => d.Salesman)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (deal == null)
-            {
-                return NotFound();
-            }
+                .FirstOrDefault(d => d.Id == id);
 
-            return View(deal);
+            return deal;
         }
+
+        public IIncludableQueryable<DealProduct, Product> GetDealProducts(int? id)
+        {
+            var dealProducts = _context.DealProducts
+                .Where(d => d.DealId == id)
+                .Include(p => p.Product);
+
+            return dealProducts;
+        }
+
 
         // GET: Deals/Create
         public IActionResult Create()

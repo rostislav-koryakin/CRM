@@ -1,6 +1,6 @@
 using System;
 
-namespace CRM.Web.Models
+namespace CRM.Web.ViewModels
 {
     public class ErrorViewModel
     {
