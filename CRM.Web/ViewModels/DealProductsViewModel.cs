@@ -1,6 +1,5 @@
 ﻿using CRM.Core.Entities;
 using Microsoft.EntityFrameworkCore.Query;
-using System.Collections.Generic;
 
 namespace CRM.Web.ViewModels
 {
