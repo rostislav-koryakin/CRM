@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.ViewModels;
 
 namespace CRM.Web.Controllers
 {
@@ -88,22 +87,37 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Companies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = _context.Companies
+                .Where(c => c.Id == id)
+                .Include(c => c.Contacts)
+                .Include(c => c.Deals)
+                .ToList();
+
             if (company == null)
             {
                 return NotFound();
             }
 
-            return View(company);
+            CompanyViewModel companyViewModel = new CompanyViewModel();
+            companyViewModel.Company = company.FirstOrDefault();
+
+            foreach (Company c in company)
+            {
+                companyViewModel.Contacts = c.Contacts;
+                companyViewModel.Deals = c.Deals;
+            }
+
+            return View(companyViewModel);
         }
+
+
 
         // GET: Companies/Create
         public IActionResult Create()
@@ -112,11 +126,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Companies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TaxpayerNumber,Name,City,Street,ZipCode,Id,CreatedDate,UpdatedDate")] Company company)
+        public async Task<IActionResult> Create([Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] Company company)
         {
             if (ModelState.IsValid)
             {
@@ -144,11 +156,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Companies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaxpayerNumber,Name,City,Street,ZipCode,Id,CreatedDate,UpdatedDate")] Company company)
+        public async Task<IActionResult> Edit(int id, [Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] Company company)
         {
             if (id != company.Id)
             {

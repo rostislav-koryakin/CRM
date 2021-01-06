@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CRM.Web.ViewModels;
 using CRM.Infrastructure.Data;
-using Newtonsoft.Json.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Web.Controllers
 {
@@ -33,9 +29,10 @@ namespace CRM.Web.Controllers
         {
             var query = from d in _context.Deals
                         group d by d.Stage into g
-                        where 
-                            g.Key == Core.Entities.Deal.DealStage.New || 
-                            g.Key == Core.Entities.Deal.DealStage.Ongoing ||
+                        where
+                            g.Key == Core.Entities.Deal.DealStage.Analisis ||
+                            g.Key == Core.Entities.Deal.DealStage.Offer ||
+                            g.Key == Core.Entities.Deal.DealStage.Negotiation ||
                             g.Key == Core.Entities.Deal.DealStage.Won
                         orderby g.Key
                         select new

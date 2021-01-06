@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.ViewModels;
 
 namespace CRM.Web.Controllers
 {
@@ -81,21 +81,46 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Salesmen/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var salesman = await _context.Salesmen
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var salesman = _context.Salesmen
+                .Where(s => s.Id == id)
+                .Include(s => s.Activities)
+                .Include(s => s.Deals)
+                .ToList();
+
             if (salesman == null)
             {
                 return NotFound();
             }
 
-            return View(salesman);
+            SalesmanViewModel salesmanViewModel = new SalesmanViewModel();
+            salesmanViewModel.Salesman = salesman.FirstOrDefault();
+            
+            List<Activity> activities = new List<Activity>();
+            List<Deal> deals = new List<Deal>();
+
+            foreach (Salesman s in salesman)
+            {
+                foreach (Activity activity in s.Activities)
+                {
+                    activities.Add(activity);
+                }
+                foreach (Deal deal in s.Deals)
+                {
+                    deals.Add(deal);
+                }
+            }
+
+            salesmanViewModel.Activities = activities;
+            salesmanViewModel.Deals = deals;
+
+            return View(salesmanViewModel);
         }
 
         // GET: Salesmen/Create

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
 using CRM.Web.ViewModels;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace CRM.Web.Controllers
 {
@@ -100,33 +99,49 @@ namespace CRM.Web.Controllers
         // GET: Deals/Details/5
         public IActionResult Details(int? id)
         {
-            DealProductsViewModel dealProductsViewModel = new DealProductsViewModel();
-            dealProductsViewModel.Deal = GetDeal(id);
-            dealProductsViewModel.DealProducts = GetDealProducts(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return View(dealProductsViewModel);
-        }
-
-        public Deal GetDeal(int? id)
-        {
-            var deal =  _context.Deals
-                .Include(d => d.Company)
+            var deal = _context.Deals
+                .Where(d => d.Id == id)
+                .Include(d => d.DealsProducts)
+                    .ThenInclude(d => d.Product)
                 .Include(d => d.Contact)
+                .Include(d => d.Company)
                 .Include(d => d.Salesman)
-                .FirstOrDefault(d => d.Id == id);
+                .ToList();
 
-            return deal;
+            if (deal == null)
+            {
+                return NotFound();
+            }
+
+            DealViewModel dealViewModel = new DealViewModel();
+            dealViewModel.Deal = deal.FirstOrDefault();
+
+            List<DealProduct> dealProducts = new List<DealProduct>();
+            List<Product> products = new List<Product>();
+
+            foreach (Deal d in deal)
+            {
+                dealProducts = d.DealsProducts;
+                dealViewModel.Company = d.Company;
+                dealViewModel.Contact = d.Contact;
+                dealViewModel.Salesman = d.Salesman;
+
+                foreach (DealProduct dealProduct in d.DealsProducts)
+                {
+                    products.Add(dealProduct.Product);
+                }
+            }
+
+            dealViewModel.DealProducts = dealProducts;
+            dealViewModel.Products = products;
+
+            return View(dealViewModel);
         }
-
-        public IIncludableQueryable<DealProduct, Product> GetDealProducts(int? id)
-        {
-            var dealProducts = _context.DealProducts
-                .Where(d => d.DealId == id)
-                .Include(p => p.Product);
-
-            return dealProducts;
-        }
-
 
         // GET: Deals/Create
         public IActionResult Create()
@@ -138,11 +153,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Deals/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,TotalAmount,Stage,Description,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] Deal deal)
+        public async Task<IActionResult> Create([Bind("Name,TotalAmount,Stage,Description,ClosingDate,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] Deal deal)
         {
             if (ModelState.IsValid)
             {
@@ -176,11 +189,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Deals/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,TotalAmount,Stage,Description,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] Deal deal)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,TotalAmount,Stage,Description,ClosingDate,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] Deal deal)
         {
             if (id != deal.Id)
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -123,8 +122,6 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Activities/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] Activity activity)
@@ -159,8 +156,6 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Activities/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] Activity activity)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.ViewModels;
 
 namespace CRM.Web.Controllers
 {
@@ -89,22 +90,42 @@ namespace CRM.Web.Controllers
         }
 
         // GET: Contacts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contact = await _context.Contacts
+            var contact =  _context.Contacts
+                .Where(c => c.Id == id)
                 .Include(c => c.Company)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.Activities)
+                .ToList();
+
             if (contact == null)
             {
                 return NotFound();
             }
 
-            return View(contact);
+            ContactViewModel contactViewModel = new ContactViewModel();
+            contactViewModel.Contact = contact.FirstOrDefault();
+
+            List<Activity> activities = new List<Activity>();
+
+            foreach (Contact c in contact)
+            {
+                contactViewModel.Company = c.Company;
+
+                foreach (Activity activity in c.Activities)
+                {
+                    activities.Add(activity);
+                }
+            }
+
+            contactViewModel.Activities = activities;
+
+            return View(contactViewModel);
         }
 
         // GET: Contacts/Create
@@ -115,11 +136,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Contacts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
         {
             if (ModelState.IsValid)
             {
@@ -149,11 +168,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Contacts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
         {
             if (id != contact.Id)
             {

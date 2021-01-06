@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -55,11 +53,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: DealProducts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DealId,ProductId,Id,CreatedDate,UpdatedDate")] DealProduct dealProduct)
+        public async Task<IActionResult> Create([Bind("DealId,ProductId,Id,CreatedDate,UpdatedDate,Quantity")] DealProduct dealProduct)
         {
             if (ModelState.IsValid)
             {
@@ -91,11 +87,9 @@ namespace CRM.Web.Controllers
         }
 
         // POST: DealProducts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DealId,ProductId,Id,CreatedDate,UpdatedDate")] DealProduct dealProduct)
+        public async Task<IActionResult> Edit(int id, [Bind("DealId,ProductId,Id,CreatedDate,UpdatedDate,Quantity")] DealProduct dealProduct)
         {
             if (id != dealProduct.Id)
             {
