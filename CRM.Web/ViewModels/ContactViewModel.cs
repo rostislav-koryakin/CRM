@@ -7,6 +7,8 @@ namespace CRM.Web.ViewModels
     {
         public Contact Contact { get; set; }
 
+        public Company Company { get; set; }
+
         public IEnumerable<Activity> Activities { get; set; }
     }
 }
