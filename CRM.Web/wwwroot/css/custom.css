@@ -1,0 +1,49 @@
+﻿body{
+    background-color: aliceblue;
+}
+
+nav {
+    background-color: #212529;
+}
+
+th {
+    background-color: #444;
+    color: #fff;
+}
+
+tr:hover {
+    background-color: #d7ecff;
+    cursor: pointer;
+}
+
+a{
+    color: #fff;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #ccc;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+#sub-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+#home-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+}
