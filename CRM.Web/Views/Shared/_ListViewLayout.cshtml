@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CRM.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/custom.css" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CRM.Web</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CRM</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,28 +19,25 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Salesmen" asp-action="Index">Salesmen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Salesmen" asp-action="Index">Salesmen</a>
+                            <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Contacts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Contacts" asp-action="Index">Contacts</a>
+                            <a class="nav-link" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+                            <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Activities</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Activities" asp-action="Index">Activities</a>
+                            <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Deals" asp-action="Index">Deals</a>
+                            <a class="nav-link" asp-area="" asp-controller="Deals" asp-action="Index">Deals</a>
                         </li>
                     </ul>
                 </div>
@@ -49,16 +46,15 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <h1>Index</h1>
-            <p>
-                <a asp-action="Create">Create New</a>
-            </p>
             <form asp-action="Index" method="get">
-                <div class="form-actions no-color">
+                <div id="sub-nav" class="form-actions no-color">
+                    <p>
+                        <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+                    </p>
                     <p>
                         Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                        <input type="submit" value="Search" class="btn btn-default" /> |
-                        <a asp-action="Index">Back to Full List</a>
+                        <input type="submit" value="Search" class="btn btn-primary btn-sm" />
+                        <a asp-action="Index" class="btn btn-primary btn-sm">Back to Full List</a>
                     </p>
                 </div>
             </form>
@@ -72,14 +68,14 @@
                asp-route-sortOrder="@ViewData["CurrentSort"]"
                asp-route-pageNumber="@(Model.PageIndex - 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-default @prevDisabled">
+               class="btn btn-primary btn-sm @prevDisabled">
                 Previous
             </a>
             <a asp-action="Index"
                asp-route-sortOrder="@ViewData["CurrentSort"]"
                asp-route-pageNumber="@(Model.PageIndex + 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-default @nextDisabled">
+               class="btn btn-primary btn-sm @nextDisabled">
                 Next
             </a>
         </main>
@@ -87,12 +83,13 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - CRM.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021  CRM.Web
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js?dt=@DateTime.Now.ToString("yyyyMMddhhmmss")" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

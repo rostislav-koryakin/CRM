@@ -5,16 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Company</h4>
+<h4>Edit Company</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TaxpayerNumber" class="control-label"></label>
+                <label asp-for="TaxpayerNumber" class="control-label">Tax Number</label>
                 <input asp-for="TaxpayerNumber" class="form-control" />
                 <span asp-validation-for="TaxpayerNumber" class="text-danger"></span>
             </div>
@@ -22,6 +20,28 @@
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Website" class="control-label"></label>
+                <input asp-for="Website" class="form-control" />
+                <span asp-validation-for="Website" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfEmployees" class="control-label">Number of Employees</label>
+                <input asp-for="NoOfEmployees" class="form-control" />
+                <span asp-validation-for="NoOfEmployees" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Industry" class="control-label"></label>
+                <select asp-for="Industry" class="form-control" asp-items="Html.GetEnumSelectList<CRM.Core.Entities.Company.Industries>()">
+                    <option selected="selected" value="">---Please select---</option>
+                </select>
+                <span asp-validation-for="Industry" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="City" class="control-label"></label>
@@ -34,18 +54,22 @@
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ZipCode" class="control-label"></label>
+                <label asp-for="ZipCode" class="control-label">Zip Code</label>
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
+                <label asp-for="Score" class="control-label"></label>
+                <input asp-for="Score" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedDate" class="control-label">Created Date</label>
                 <input asp-for="CreatedDate" class="form-control" />
                 <span asp-validation-for="CreatedDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UpdatedDate" class="control-label"></label>
+                <label asp-for="UpdatedDate" class="control-label">Updated Date</label>
                 <input asp-for="UpdatedDate" class="form-control" />
                 <span asp-validation-for="UpdatedDate" class="text-danger"></span>
             </div>
@@ -54,10 +78,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

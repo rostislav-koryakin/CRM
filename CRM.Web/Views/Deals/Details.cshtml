@@ -1,78 +1,100 @@
-﻿@model CRM.Web.ViewModels.DealProductsViewModel
+﻿@model CRM.Web.ViewModels.DealViewModel
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Deal</h4>
+    <div class="button-panel">
+        <h3>@Html.DisplayFor(model => model.Deal.Name)</h3>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Deal.Id" class="btn btn-primary btn-sm">Edit</a>
+        </p>
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+        </p>
+        <p>
+            <a asp-action="Delete" asp-route-id="@Model.Deal.Id" class="btn btn-primary btn-sm">Delete</a>
+        </p>
+    </div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.Name)
+            Name
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Deal.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.TotalAmount)
+            Total Amount
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Deal.TotalAmount)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.Stage)
+            Stage
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Deal.Stage)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.Description)
+            Description
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Deal.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.Contact)
+            Contact
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Deal.Contact.Email)
+            <a asp-controller="Contacts" asp-action="Details" asp-route-id="@Model.Contact.Id">
+                @Html.DisplayFor(model => model.Contact.FirstName) @Html.DisplayFor(model => model.Contact.LastName)
+            </a>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.Company)
+            Company
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Deal.Company.Name)
+            <a asp-controller="Companies" asp-action="Details" asp-route-id="@Model.Company.Id">
+                @Html.DisplayFor(model => model.Company.Name)
+            </a>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.Salesman)
+            Salesman
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Deal.Salesman.Email)
+            <a asp-controller="Salesmen" asp-action="Details" asp-route-id="@Model.Salesman.Id">
+                @Html.DisplayFor(model => model.Salesman.FirstName) @Html.DisplayFor(model => model.Salesman.LastName)
+            </a>
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.CreatedDate)
+            Created Date
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Deal.CreatedDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal.UpdatedDate)
+            Updated Date
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Deal.UpdatedDate)
         </dd>
+        <dt class="col-sm-2">
+            Closing Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Deal.ClosingDate)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Deal.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-<div>
-    <h4>Related Products</h4>
+    <h4>Deal Items</h4>
+    <div>
+        <p>
+            <a asp-controller="DealProducts" asp-action="Create" class="btn btn-primary btn-sm">Add Item</a>
+        </p>
+    </div>
     <hr />
     <table class="table">
         <thead>
@@ -83,13 +105,16 @@
                 <th>
                     <a>Unit Price</a>
                 </th>
+                <th>
+                    <a>Quantity</a>
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.DealProducts)
             {
-                <tr>
+                <tr onclick="location.href = '@(Url.Action("Details", "DealProducts", new { id = item.Id }))'">
                     <td>
                         @Html.DisplayFor(modelItem => item.Product.Name)
                     </td>
@@ -97,9 +122,11 @@
                         @Html.DisplayFor(modelItem => item.Product.Price)
                     </td>
                     <td>
-                        <a asp-controller="DealProducts" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-controller="DealProducts" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-controller="DealProducts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        <a asp-controller="DealProducts" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a> |
+                        <a asp-controller="DealProducts" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
                     </td>
                 </tr>
             }

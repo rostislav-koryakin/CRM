@@ -16,7 +16,7 @@ tr:hover {
     cursor: pointer;
 }
 
-a{
+a {
     color: #fff;
 }
 
@@ -37,6 +37,10 @@ a:active {
     text-decoration: none;
 }
 
+dd>a {
+    color: #000;
+}
+
 #sub-nav {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -46,4 +50,11 @@ a:active {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
+}
+
+.button-panel {
+    display: grid;
+    grid-template-columns: 10fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    justify-items: start;
 }

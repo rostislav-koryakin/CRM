@@ -1,7 +1,6 @@
 ﻿@model PaginatedList<CRM.Core.Entities.Deal>
 
 @{
-    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_ListViewLayout.cshtml";
 }
 
@@ -12,7 +11,7 @@
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TotalAmountSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">TotalAmount</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TotalAmountSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Total Amount</a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["StageSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Stage</a>
@@ -23,39 +22,32 @@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["CompanySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Company</a>
             </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["SalesmanSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Salesman</a>
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contact.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Salesman.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr onclick="location.href = '@(Url.Action("Details", "Deals", new { id = item.Id }))'">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contact.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

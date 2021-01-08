@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Deal</h4>
+<h4>Edit Deal</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,7 +17,7 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TotalAmount" class="control-label"></label>
+                <label asp-for="TotalAmount" class="control-label">Total Amount</label>
                 <input asp-for="TotalAmount" class="form-control" />
                 <span asp-validation-for="TotalAmount" class="text-danger"></span>
             </div>
@@ -35,40 +33,41 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ContactId" class="control-label"></label>
+                <label asp-for="ContactId" class="control-label">Contact</label>
                 <select asp-for="ContactId" class="form-control" asp-items="ViewBag.ContactId"></select>
                 <span asp-validation-for="ContactId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CompanyId" class="control-label"></label>
+                <label asp-for="CompanyId" class="control-label">Company</label>
                 <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId"></select>
                 <span asp-validation-for="CompanyId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalesmanId" class="control-label"></label>
+                <label asp-for="SalesmanId" class="control-label">Salesman</label>
                 <select asp-for="SalesmanId" class="form-control" asp-items="ViewBag.SalesmanId"></select>
                 <span asp-validation-for="SalesmanId" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
+                <label asp-for="CreatedDate" class="control-label">Created Date</label>
                 <input asp-for="CreatedDate" class="form-control" />
                 <span asp-validation-for="CreatedDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UpdatedDate" class="control-label"></label>
+                <label asp-for="UpdatedDate" class="control-label">Updated Date</label>
                 <input asp-for="UpdatedDate" class="form-control" />
                 <span asp-validation-for="UpdatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClosingDate" class="control-label">Closing Date</label>
+                <input asp-for="ClosingDate" class="form-control" />
+                <span asp-validation-for="ClosingDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

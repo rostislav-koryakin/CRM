@@ -5,69 +5,78 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Activity</h4>
+    <div class="button-panel">
+        <h3>@Html.DisplayFor(model => model.Name)</h3>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
+        </p>
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+        </p>
+        <p>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Delete</a>
+        </p>
+    </div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
+            Type
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Type)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Contact)
+            Name
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Contact.Email)
+            @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Salesman)
+            Description
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Salesman.Email)
+            @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            Start Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt class="col-sm-2">
+            End Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt class="col-sm-2">
+            Contact
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-controller="Contacts" asp-action="Details" asp-route-id="@Model.Contact.Id">
+                @Html.DisplayFor(model => model.Contact.FirstName) @Html.DisplayFor(model => model.Contact.LastName)
+            </a>
+        </dd>
+        <dt class="col-sm-2">
+            Salesman
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-controller="Salesmen" asp-action="Details" asp-route-id="@Model.Salesman.Id">
+                @Html.DisplayFor(model => model.Salesman.FirstName) @Html.DisplayFor(model => model.Salesman.LastName)
+            </a>
+        </dd>
+        <dt class="col-sm-2">
+            Created Date
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedDate)
+            Updated Date
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedDate)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>

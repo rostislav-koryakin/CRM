@@ -4,48 +4,54 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-
 <div>
-    <h4>DealProduct</h4>
+    <div class="button-panel">
+        <h3>Deal Item</h3>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
+        </p>
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+        </p>
+        <p>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Delete</a>
+        </p>
+    </div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Deal)
+        <dt class="col-sm-2">
+            Deal
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Deal.Name)
+        <dd class="col-sm-10">
+            <a asp-controller="Deals" asp-action="Details" asp-route-id="@Model.DealId">
+                @Html.DisplayFor(model => model.Deal.Name)
+            </a>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
+        <dt class="col-sm-2">
+            Product
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Name)
+        <dd class="col-sm-10">
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">
+                @Html.DisplayFor(model => model.Product.Name)
+            </a>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+        <dt class="col-sm-2">
+            Created Date
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedDate)
+        <dt class="col-sm-2">
+            Quantity
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            Updated Date
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedDate)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-</body>
-</html>

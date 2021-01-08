@@ -9,300 +9,296 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <figure class="highcharts-figure">
-                <div id="funnel-container"></div>
-                <p class="highcharts-description">
-                </p>
-            </figure>
-            <script>
-                $(document).ready(function () {
-                    $.getJSON("/Home/GetDealsByStage", function (data) {
-                        var groups = [];
-                        for (var i = 0; i < data.length; i++) {
-                            groups.push([data[i].stageName, data[i].stageTotalAmount]);
-                        }
-                        console.log(groups);
+<div id="home-container" class="container">
+    <div class="col">
+        <figure class="highcharts-figure">
+            <div id="funnel-container"></div>
+            <p class="highcharts-description">
+            </p>
+        </figure>
+        <script>
+            $(document).ready(function () {
+                $.getJSON("/Home/GetDealsByStage", function (data) {
+                    var groups = [];
+                    for (var i = 0; i < data.length; i++) {
+                        groups.push([data[i].stageName, data[i].stageTotalAmount]);
+                    }
+                    console.log(groups);
 
-                        Highcharts.chart('funnel-container', {
-                            chart: {
-                                type: 'funnel'
-                            },
-                            title: {
-                                text: 'Sales funnel'
-                            },
-                            plotOptions: {
-                                series: {
-                                    dataLabels: {
-                                        enabled: true,
-                                        format: '<b>{point.name}</b> ({point.y:,.0f})',
-                                        softConnector: true
-                                    },
-                                    center: ['40%', '50%'],
-                                    neckWidth: '30%',
-                                    neckHeight: '25%',
-                                    width: '80%'
-                                }
-                            },
-                            legend: {
-                                enabled: false
-                            },
-                            series: [{
-                                name: 'Total Amount',
-                                data: groups
-                            }],
-
-                            responsive: {
-                                rules: [{
-                                    condition: {
-                                        maxWidth: 500
-                                    },
-                                    chartOptions: {
-                                        plotOptions: {
-                                            series: {
-                                                dataLabels: {
-                                                    inside: true
-                                                },
-                                                center: ['50%', '50%'],
-                                                width: '100%'
-                                            }
-                                        }
-                                    }
-                                }]
-                            }
-                        });
-                    });
-                });
-            </script>
-        </div>
-        <div class="col">
-            <figure class="highcharts-figure">
-                <div id="activities-container"></div>
-                <p class="highcharts-description">
-                </p>
-            </figure>
-            <script>
-                $(document).ready(function () {
-                    $.getJSON("/Home/GetActivitiesBySalesman", function (data) {
-                        var groups = [];
-                        for (var i = 0; i < data.length; i++) {
-                            groups.push([data[i].name, data[i].sum]);
-                        }
-                        console.log(data);
-
-                        Highcharts.chart('activities-container', {
-                            chart: {
-                                type: 'column'
-                            },
-                            title: {
-                                text: 'Top 5 Sales Representatives per Activities'
-                            },
-                            subtitle: {
-                                text: ''
-                            },
-                            xAxis: {
-                                type: 'category',
-                                labels: {
-                                    rotation: 0,
-                                    style: {
-                                        fontSize: '12px',
-                                        fontFamily: 'Verdana, sans-serif'
-                                    }
-                                }
-                            },
-                            yAxis: {
-                                min: 0,
-                                title: {
-                                    text: 'Activities'
-                                }
-                            },
-                            legend: {
-                                enabled: false
-                            },
-                            tooltip: {
-                                pointFormat: 'Activities: <b>{point.y: 1f}</b>'
-                            },
-                            series: [{
-                                name: 'Activities',
-                                data: groups,
+                    Highcharts.chart('funnel-container', {
+                        chart: {
+                            type: 'funnel'
+                        },
+                        title: {
+                            text: 'Sales funnel'
+                        },
+                        plotOptions: {
+                            series: {
                                 dataLabels: {
-                                    enabled: false,
-                                    rotation: -90,
-                                    color: '#FFFFFF',
-                                    align: 'right',
-                                    format: '{point.y: 1f}', // one decimal
-                                    y: 10, // 10 pixels down from the top
-                                    style: {
-                                        fontSize: '13px',
-                                        fontFamily: 'Verdana, sans-serif'
+                                    enabled: true,
+                                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                                    softConnector: true
+                                },
+                                center: ['40%', '50%'],
+                                neckWidth: '30%',
+                                neckHeight: '25%',
+                                width: '80%'
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Total Amount',
+                            data: groups
+                        }],
+
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    plotOptions: {
+                                        series: {
+                                            dataLabels: {
+                                                inside: true
+                                            },
+                                            center: ['50%', '50%'],
+                                            width: '100%'
+                                        }
                                     }
                                 }
                             }]
-                        });
+                        }
                     });
                 });
-            </script>
-        </div>
+            });
+        </script>
     </div>
-    <div class="row">
-        <div class="col">
-            <figure class="highcharts-figure">
-                <div id="pie-container"></div>
-                <p class="highcharts-description">
-                    Pie charts are very popular for showing a compact overview of a
-                    composition or comparison. While they can be harder to read than
-                    column charts, they remain a popular choice for small datasets.
-                </p>
-            </figure>
-            <script>
-                Highcharts.chart('pie-container', {
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false,
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Browser market shares in January, 2018'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                    },
-                    accessibility: {
-                        point: {
-                            valueSuffix: '%'
-                        }
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Brands',
-                        colorByPoint: true,
-                        data: [{
-                            name: 'Chrome',
-                            y: 61.41,
-                            sliced: true,
-                            selected: true
-                        }, {
-                            name: 'Internet Explorer',
-                            y: 11.84
-                        }, {
-                            name: 'Firefox',
-                            y: 10.85
-                        }, {
-                            name: 'Edge',
-                            y: 4.67
-                        }, {
-                            name: 'Safari',
-                            y: 4.18
-                        }, {
-                            name: 'Sogou Explorer',
-                            y: 1.64
-                        }, {
-                            name: 'Opera',
-                            y: 1.6
-                        }, {
-                            name: 'QQ',
-                            y: 1.2
-                        }, {
-                            name: 'Other',
-                            y: 2.61
-                        }]
-                    }]
-                });
-            </script>
-        </div>
-        <div class="col">
-            <figure class="highcharts-figure">
-                <div id="column-container"></div>
-                <p class="highcharts-description">
-                    Chart showing use of rotated axis labels and data labels. This can be a
-                    way to include more labels in the chart, but note that more labels can
-                    sometimes make charts harder to read.
-                </p>
-            </figure>
-            <script>
-                Highcharts.chart('column-container', {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'World\'s largest cities per 2017'
-                    },
-                    subtitle: {
-                        text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
-                    },
-                    xAxis: {
-                        type: 'category',
-                        labels: {
-                            rotation: -45,
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
+    <div class="col">
+        <figure class="highcharts-figure">
+            <div id="activities-container"></div>
+            <p class="highcharts-description">
+            </p>
+        </figure>
+        <script>
+            $(document).ready(function () {
+                $.getJSON("/Home/GetActivitiesBySalesman", function (data) {
+                    var groups = [];
+                    for (var i = 0; i < data.length; i++) {
+                        groups.push([data[i].name, data[i].sum]);
+                    }
+                    console.log(data);
+
+                    Highcharts.chart('activities-container', {
+                        chart: {
+                            type: 'column'
+                        },
                         title: {
-                            text: 'Population (millions)'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        pointFormat: 'Population in 2017: <b>{point.y:.1f} millions</b>'
-                    },
-                    series: [{
-                        name: 'Population',
-                        data: [
-                            ['Shanghai', 24.2],
-                            ['Beijing', 20.8],
-                            ['Karachi', 14.9],
-                            ['Shenzhen', 13.7],
-                            ['Guangzhou', 13.1],
-                            ['Istanbul', 12.7],
-                            ['Mumbai', 12.4],
-                            ['Moscow', 12.2],
-                            ['São Paulo', 12.0],
-                            ['Delhi', 11.7],
-                            ['Kinshasa', 11.5],
-                            ['Tianjin', 11.2],
-                            ['Lahore', 11.1],
-                            ['Jakarta', 10.6],
-                            ['Dongguan', 10.6],
-                            ['Lagos', 10.6],
-                            ['Bengaluru', 10.3],
-                            ['Seoul', 9.8],
-                            ['Foshan', 9.3],
-                            ['Tokyo', 9.3]
-                        ],
+                            text: 'Top 5 Sales Representatives per Activities'
+                        },
+                        subtitle: {
+                            text: ''
+                        },
+                        xAxis: {
+                            type: 'category',
+                            labels: {
+                                rotation: 0,
+                                style: {
+                                    fontSize: '12px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Activities'
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            pointFormat: 'Activities: <b>{point.y: 1f}</b>'
+                        },
+                        series: [{
+                            name: 'Activities',
+                            data: groups,
+                            dataLabels: {
+                                enabled: false,
+                                rotation: -90,
+                                color: '#FFFFFF',
+                                align: 'right',
+                                format: '{point.y: 1f}', // one decimal
+                                y: 10, // 10 pixels down from the top
+                                style: {
+                                    fontSize: '13px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        }]
+                    });
+                });
+            });
+        </script>
+    </div>
+    <div class="col">
+        <figure class="highcharts-figure">
+            <div id="pie-container"></div>
+            <p class="highcharts-description">
+                Pie charts are very popular for showing a compact overview of a
+                composition or comparison. While they can be harder to read than
+                column charts, they remain a popular choice for small datasets.
+            </p>
+        </figure>
+        <script>
+            Highcharts.chart('pie-container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Browser market shares in January, 2018'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            rotation: -90,
-                            color: '#FFFFFF',
-                            align: 'right',
-                            format: '{point.y:.1f}', // one decimal
-                            y: 10, // 10 pixels down from the top
-                            style: {
-                                fontSize: '13px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                         }
+                    }
+                },
+                series: [{
+                    name: 'Brands',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Chrome',
+                        y: 61.41,
+                        sliced: true,
+                        selected: true
+                    }, {
+                        name: 'Internet Explorer',
+                        y: 11.84
+                    }, {
+                        name: 'Firefox',
+                        y: 10.85
+                    }, {
+                        name: 'Edge',
+                        y: 4.67
+                    }, {
+                        name: 'Safari',
+                        y: 4.18
+                    }, {
+                        name: 'Sogou Explorer',
+                        y: 1.64
+                    }, {
+                        name: 'Opera',
+                        y: 1.6
+                    }, {
+                        name: 'QQ',
+                        y: 1.2
+                    }, {
+                        name: 'Other',
+                        y: 2.61
                     }]
-                });
-            </script>
-        </div>
+                }]
+            });
+        </script>
+    </div>
+    <div class="col">
+        <figure class="highcharts-figure">
+            <div id="column-container"></div>
+            <p class="highcharts-description">
+                Chart showing use of rotated axis labels and data labels. This can be a
+                way to include more labels in the chart, but note that more labels can
+                sometimes make charts harder to read.
+            </p>
+        </figure>
+        <script>
+            Highcharts.chart('column-container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'World\'s largest cities per 2017'
+                },
+                subtitle: {
+                    text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
+                },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        rotation: -45,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Population (millions)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: 'Population in 2017: <b>{point.y:.1f} millions</b>'
+                },
+                series: [{
+                    name: 'Population',
+                    data: [
+                        ['Shanghai', 24.2],
+                        ['Beijing', 20.8],
+                        ['Karachi', 14.9],
+                        ['Shenzhen', 13.7],
+                        ['Guangzhou', 13.1],
+                        ['Istanbul', 12.7],
+                        ['Mumbai', 12.4],
+                        ['Moscow', 12.2],
+                        ['São Paulo', 12.0],
+                        ['Delhi', 11.7],
+                        ['Kinshasa', 11.5],
+                        ['Tianjin', 11.2],
+                        ['Lahore', 11.1],
+                        ['Jakarta', 10.6],
+                        ['Dongguan', 10.6],
+                        ['Lagos', 10.6],
+                        ['Bengaluru', 10.3],
+                        ['Seoul', 9.8],
+                        ['Foshan', 9.3],
+                        ['Tokyo', 9.3]
+                    ],
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        format: '{point.y:.1f}', // one decimal
+                        y: 10, // 10 pixels down from the top
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+        </script>
     </div>
 </div>

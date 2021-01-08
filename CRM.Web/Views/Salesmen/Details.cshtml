@@ -1,56 +1,162 @@
-﻿@model CRM.Core.Entities.Salesman
+﻿@model CRM.Web.ViewModels.SalesmanViewModel
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<h1>Details</h1>
-
 <div>
-    <h4>Salesman</h4>
+    <div class="button-panel">
+        <h3>@Html.DisplayFor(model => model.Salesman.FirstName) @Html.DisplayFor(model => model.Salesman.LastName)</h3>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Salesman.Id" class="btn btn-primary btn-sm">Edit</a>
+        </p>
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+        </p>
+        <p>
+            <a asp-action="Delete" asp-route-id="@Model.Salesman.Id" class="btn btn-primary btn-sm">Delete</a>
+        </p>
+    </div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            First Name
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.Salesman.FirstName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+            Last Name
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
+            @Html.DisplayFor(model => model.Salesman.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
+            Phone
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
+            @Html.DisplayFor(model => model.Salesman.Phone)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            Email
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.Salesman.Email)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+            Created Date
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+            @Html.DisplayFor(model => model.Salesman.CreatedDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedDate)
+            Updated Date
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedDate)
+            @Html.DisplayFor(model => model.Salesman.UpdatedDate)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h4>Related Activities</h4>
+    <div>
+        <p>
+            <a asp-controller="Activities" asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+        </p>
+    </div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a>Name</a>
+                </th>
+                <th>
+                    <a>Type</a>
+                </th>
+                <th>
+                    <a>Start Date</a>
+                </th>
+                <th>
+                    <a>End Date</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Activities)
+            {
+                <tr onclick="location.href = '@(Url.Action("Details", "Activities", new { id = item.Id }))'">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        <a asp-controller="Activities" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a> |
+                        <a asp-controller="Activities" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <h4>Related Deals</h4>
+    <div>
+        <p>
+            <a asp-controller="Deals" asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+        </p>
+    </div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a>Name</a>
+                </th>
+                <th>
+                    <a>Stage</a>
+                </th>
+                <th>
+                    <a>Total Amount</a>
+                </th>
+                <th>
+                    <a>Closing Date</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Deals)
+            {
+                <tr onclick="location.href = '@(Url.Action("Details", "Deals", new { id = item.Id }))'">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Stage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClosingDate)
+                    </td>
+                    <td>
+                        <a asp-controller="Deals" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a> |
+                        <a asp-controller="Deals" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

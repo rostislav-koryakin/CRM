@@ -1,61 +1,137 @@
-﻿@model CRM.Core.Entities.Contact
+﻿@model CRM.Web.ViewModels.ContactViewModel
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Contact</h4>
+    <div class="button-panel">
+        <h3>@Html.DisplayFor(model => model.Contact.FirstName) @Html.DisplayFor(model => model.Contact.LastName)</h3>
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Contact.Id" class="btn btn-primary btn-sm">Edit</a>
+        </p>
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+        </p>
+        <p>
+            <a asp-action="Delete" asp-route-id="@Model.Contact.Id" class="btn btn-primary btn-sm">Delete</a>
+        </p>
+    </div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+        <dt class="col-sm-2">
+            First Name
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.FirstName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+        <dt class="col-sm-2">
+            Last Name
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.LastName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
+        <dt class="col-sm-2">
+            Phone
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.Phone)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+        <dt class="col-sm-2">
+            Email
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Company)
+        <dt class="col-sm-2">
+            Source
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Company.Name)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.Source)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
+        <dt class="col-sm-2">
+            Company
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
+        <dd class="col-sm-10">
+            <a asp-controller="Companies" asp-action="Details" asp-route-id="@Model.Company.Id">
+                @Html.DisplayFor(model => model.Company.Name)
+            </a>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedDate)
+        <dt class="col-sm-2">
+            Position
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.Position)
+        </dd>
+        <dt class="col-sm-2">
+            Description
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Created Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.CreatedDate)
+        </dd>
+        <dt class="col-sm-2">
+            Updated Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contact.UpdatedDate)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h4>Related Activities</h4>
+    <div>
+        <p>
+            <a asp-controller="Activities" asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+        </p>
+    </div>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a>Name</a>
+                </th>
+                <th>
+                    <a>Type</a>
+                </th>
+                <th>
+                    <a>Start Date</a>
+                </th>
+                <th>
+                    <a>End Date</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Activities)
+            {
+                <tr onclick="location.href = '@(Url.Action("Details", "Activities", new { id = item.Id }))'">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        <a asp-controller="Activities" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a> |
+                        <a asp-controller="Activities" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
