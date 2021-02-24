@@ -57,25 +57,43 @@ namespace CRM.Web.Controllers
                             sum = salesGroup.Count()
                         };
 
-            //var query2 = _context.Salesmen
-            //        .Include(s => s.Activities)
-            //            .ThenInclude(s => s.Type)
-            //        .Select(s => new
-            //            {
-            //                name = s.LastName,
-            //                type = s.Activities
-            //            })
-            //        .ToList();
-
             var result = query.Take(5);
 
             return new JsonResult(result);
         }
 
-
-        public IActionResult Privacy()
+        public IActionResult GetCompaniesByDealsSum()
         {
-            return View();
+            var query = from c in _context.Companies
+                        join d in _context.Deals
+                               on c.Id equals d.CompanyId
+                        group d by d.Company.Name into companiesGroup
+                        orderby companiesGroup.Sum(d => d.TotalAmount) descending
+                        select new
+                        {
+                            name = companiesGroup.Key,
+                            sum = companiesGroup.Sum(d => d.TotalAmount)
+                        };
+
+            var result = query.Take(10);
+
+            return new JsonResult(result);
+        }
+
+        public IActionResult GetCompaniesByIndustry()
+        {
+            var query = from c in _context.Companies
+                        group c by c.Industry into companiesGroup
+                        orderby companiesGroup.Count() descending
+                        select new
+                        {
+                            industyName = companiesGroup.Key.ToString(),
+                            companiesNumber = companiesGroup.Count()
+                        };
+
+            var result = query;
+
+            return new JsonResult(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
