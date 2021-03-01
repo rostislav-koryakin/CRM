@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CRM.Web.ViewModels;
 using CRM.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace CRM.Web.Controllers
 {
@@ -25,7 +27,7 @@ namespace CRM.Web.Controllers
             return View();
         }
 
-        public IActionResult GetDealsByStage()
+        public async Task<IActionResult> GetDealsByStage()
         {
             var query = from d in _context.Deals
                         group d by d.Stage into g
@@ -41,10 +43,12 @@ namespace CRM.Web.Controllers
                             stageTotalAmount = g.Sum(d => d.TotalAmount)
                         };
 
-            return new JsonResult(query);
+            var list = await query.ToListAsync();
+
+            return new JsonResult(list);
         }
 
-        public IActionResult GetActivitiesBySalesman()
+        public async Task<IActionResult> GetActivitiesBySalesmanAsync()
         {
             var query = from s in _context.Salesmen
                         join a in _context.Activities
@@ -57,12 +61,12 @@ namespace CRM.Web.Controllers
                             sum = salesGroup.Count()
                         };
 
-            var result = query.Take(5);
+            var list = await query.Take(5).ToListAsync();
 
-            return new JsonResult(result);
+            return new JsonResult(list);
         }
 
-        public IActionResult GetCompaniesByDealsSum()
+        public async Task<IActionResult> GetCompaniesByDealsSumAsync()
         {
             var query = from c in _context.Companies
                         join d in _context.Deals
@@ -75,12 +79,12 @@ namespace CRM.Web.Controllers
                             sum = companiesGroup.Sum(d => d.TotalAmount)
                         };
 
-            var result = query.Take(10);
+            var list = await query.Take(10).ToListAsync();
 
-            return new JsonResult(result);
+            return new JsonResult(list);
         }
 
-        public IActionResult GetCompaniesByIndustry()
+        public async Task<IActionResult> GetCompaniesByIndustryAsync()
         {
             var query = from c in _context.Companies
                         group c by c.Industry into companiesGroup
@@ -91,9 +95,9 @@ namespace CRM.Web.Controllers
                             companiesNumber = companiesGroup.Count()
                         };
 
-            var result = query;
+            var list = await query.ToListAsync();
 
-            return new JsonResult(result);
+            return new JsonResult(list);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

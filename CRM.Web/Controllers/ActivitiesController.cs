@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
 {
     public class ActivitiesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IActivitiesService _activitiesService;
 
-        public ActivitiesController(AppDbContext context)
+        public ActivitiesController(AppDbContext context, IActivitiesService activitiesService)
         {
             _context = context;
+            _activitiesService = activitiesService;
         }
 
         // GET: Activities
@@ -40,57 +42,9 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var appDbContext = _context.Activities.Include(a => a.Contact).Include(a => a.Salesman).AsQueryable();
+            var activities = await _activitiesService.GetActivities(sortOrder, searchString, currentFilter, pageNumber);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                appDbContext = appDbContext.Where(a => a.Name.Contains(searchString)
-                                       || a.Contact.Email.Contains(searchString)
-                                       || a.Salesman.Email.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    appDbContext = appDbContext.OrderByDescending(a => a.Name);
-                    break;
-                case "Type":
-                    appDbContext = appDbContext.OrderBy(a => a.Type);
-                    break;
-                case "type_desc":
-                    appDbContext = appDbContext.OrderByDescending(a => a.Type);
-                    break;
-                case "StartDate":
-                    appDbContext = appDbContext.OrderBy(a => a.StartDate);
-                    break;
-                case "start_date_desc":
-                    appDbContext = appDbContext.OrderByDescending(a => a.StartDate);
-                    break;
-                case "EndDate":
-                    appDbContext = appDbContext.OrderBy(a => a.EndDate);
-                    break;
-                case "end_date_desc":
-                    appDbContext = appDbContext.OrderByDescending(a => a.EndDate);
-                    break;
-                case "Contact":
-                    appDbContext = appDbContext.OrderBy(a => a.Contact.Email);
-                    break;
-                case "contact_desc":
-                    appDbContext = appDbContext.OrderByDescending(a => a.Contact.Email);
-                    break;
-                case "Salesman":
-                    appDbContext = appDbContext.OrderBy(a => a.Salesman.Email);
-                    break;
-                case "salesman_desc":
-                    appDbContext = appDbContext.OrderByDescending(a => a.Salesman.Email);
-                    break;
-                default:
-                    appDbContext = appDbContext.OrderBy(a => a.Name);
-                    break;
-            }
-
-            int pageSize = 10;
-            return View(await PaginatedList<Activity>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(activities);
         }
 
         // GET: Activities/Details/5
@@ -101,10 +55,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activities
-                .Include(a => a.Contact)
-                .Include(a => a.Salesman)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var activity = await _activitiesService.GetActivityById(id);
+
             if (activity == null)
             {
                 return NotFound();
@@ -118,6 +70,7 @@ namespace CRM.Web.Controllers
         {
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email");
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email");
+            
             return View();
         }
 
@@ -126,15 +79,22 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] Activity activity)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(activity);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            var successful = await _activitiesService.CreateActivity(activity);
+
+            if (!successful)
+            {
+                return BadRequest("Could not add Activity.");
+            }
+
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", activity.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", activity.SalesmanId);
-            return View(activity);
+
+            return RedirectToAction("Index");
         }
 
         // GET: Activities/Edit/5
@@ -145,13 +105,16 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activities.FindAsync(id);
+            var activity = await _activitiesService.GetActivityById(id);
+
             if (activity == null)
             {
                 return NotFound();
             }
+            
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", activity.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", activity.SalesmanId);
+            
             return View(activity);
         }
 
@@ -169,24 +132,26 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    _context.Update(activity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ActivityExists(activity.Id))
+                    var result = await _activitiesService.UpdateActivity(activity);
+
+                    if (result == false)
                     {
                         return NotFound();
                     }
-                    else
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!(await _activitiesService.ActivityExists(activity.Id)))
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", activity.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", activity.SalesmanId);
+            
             return View(activity);
         }
 
@@ -198,10 +163,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var activity = await _context.Activities
-                .Include(a => a.Contact)
-                .Include(a => a.Salesman)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var activity = await _activitiesService.GetActivityById(id);
+
             if (activity == null)
             {
                 return NotFound();
@@ -213,17 +176,21 @@ namespace CRM.Web.Controllers
         // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var activity = await _context.Activities.FindAsync(id);
-            _context.Activities.Remove(activity);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private bool ActivityExists(int id)
-        {
-            return _context.Activities.Any(e => e.Id == id);
+            var result = await _activitiesService.DeleteActivity(id);
+
+            if (result == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
