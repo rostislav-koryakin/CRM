@@ -89,7 +89,7 @@ namespace CRM.Web.Services
         {
             activity.CreatedDate = DateTime.Now;
 
-            _context.Add(activity);
+            await _context.AddAsync(activity);
 
             var saveResult = await _context.SaveChangesAsync();
 

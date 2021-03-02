@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
 using CRM.Web.ViewModels;
+using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
 {
     public class ContactsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IContactsService _contactsService;
 
-        public ContactsController(AppDbContext context)
+        public ContactsController(AppDbContext context, IContactsService contactsService)
         {
             _context = context;
+            _contactsService = contactsService;
         }
 
         // GET: Contacts
@@ -41,89 +44,32 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var appDbContext = _context.Contacts.Include(c => c.Company).AsQueryable();
+            var contacts = await _contactsService.GetContacts(sortOrder, searchString, currentFilter, pageNumber);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                appDbContext = appDbContext.Where(c => c.FirstName.Contains(searchString)
-                                                    || c.LastName.Contains(searchString)
-                                                    || c.Email.Contains(searchString)
-                                                    || c.Company.Name.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "first_name_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.FirstName);
-                    break;
-                case "LastName":
-                    appDbContext = appDbContext.OrderBy(c => c.LastName);
-                    break;
-                case "last_name_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.LastName);
-                    break;
-                case "Phone":
-                    appDbContext = appDbContext.OrderBy(c => c.Phone);
-                    break;
-                case "phone_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.Phone);
-                    break;
-                case "Email":
-                    appDbContext = appDbContext.OrderBy(c => c.Email);
-                    break;
-                case "email_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.Email);
-                    break;
-                case "Company":
-                    appDbContext = appDbContext.OrderBy(c => c.Company.Name);
-                    break;
-                case "company_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.Company.Name);
-                    break;
-                default:
-                    appDbContext = appDbContext.OrderBy(c => c.FirstName);
-                    break;
-            }
-
-            int pageSize = 10;
-            return View(await PaginatedList<Contact>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(contacts);
         }
 
         // GET: Contacts/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var contact =  _context.Contacts
-                .Where(c => c.Id == id)
-                .Include(c => c.Company)
-                .Include(c => c.Activities)
-                .ToList();
+            var contact = await _contactsService.GetContactById(id);
 
             if (contact == null)
             {
                 return NotFound();
             }
 
-            ContactViewModel contactViewModel = new ContactViewModel();
-            contactViewModel.Contact = contact.FirstOrDefault();
-
-            List<Activity> activities = new List<Activity>();
-
-            foreach (Contact c in contact)
+            var contactViewModel = new ContactViewModel
             {
-                contactViewModel.Company = c.Company;
-
-                foreach (Activity activity in c.Activities)
-                {
-                    activities.Add(activity);
-                }
-            }
-
-            contactViewModel.Activities = activities;
+                Activities = contact.Activities,
+                Company = contact.Company,
+                Contact = contact
+            };
 
             return View(contactViewModel);
         }
@@ -132,6 +78,7 @@ namespace CRM.Web.Controllers
         public IActionResult Create()
         {
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
+
             return View();
         }
 
@@ -140,14 +87,21 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
+
+            var successful = await _contactsService.CreateContact(contact);
+
+            if (!successful)
+            {
+                return BadRequest("Could not add Contact.");
+            }
+
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", contact.CompanyId);
-            return View(contact);
+            
+            return RedirectToAction("Index");
         }
 
         // GET: Contacts/Edit/5
@@ -158,12 +112,15 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts.FindAsync(id);
+            var contact = await _contactsService.GetContactById(id);
+            
             if (contact == null)
             {
                 return NotFound();
             }
+
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", contact.CompanyId);
+            
             return View(contact);
         }
 
@@ -181,23 +138,26 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    _context.Update(contact);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ContactExists(contact.Id))
+                    var result = await _contactsService.UpdateContact(contact);
+
+                    if (result == false)
                     {
                         return NotFound();
                     }
-                    else
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!(await _contactsService.ContactExists(contact.Id)))
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", contact.CompanyId);
+            
             return View(contact);
         }
 
@@ -209,9 +169,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contacts
-                .Include(c => c.Company)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var contact = await _contactsService.GetContactById(id);
+
             if (contact == null)
             {
                 return NotFound();
@@ -223,17 +182,21 @@ namespace CRM.Web.Controllers
         // POST: Contacts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var contact = await _context.Contacts.FindAsync(id);
-            _context.Contacts.Remove(contact);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private bool ContactExists(int id)
-        {
-            return _context.Contacts.Any(e => e.Id == id);
+            var result = await _contactsService.DeleteContact(id);
+
+            if (result == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -21,8 +21,10 @@ namespace CRM.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDealsService, DealsService>();
             services.AddScoped<IActivitiesService, ActivitiesService>();
+            services.AddScoped<ICompaniesService, CompaniesService>();
+            services.AddScoped<IContactsService, ContactsService>();
+            services.AddScoped<IDealsService, DealsService>();
 
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer((Configuration.GetConnectionString("Default"))));

@@ -18,7 +18,6 @@ namespace CRM.Web.Services
 
         public async Task<PaginatedList<Deal>> GetDeals(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
-            
             var appDbContext = _context.Deals
                 .Include(d => d.Company)
                 .Include(d => d.Contact)
@@ -96,7 +95,7 @@ namespace CRM.Web.Services
         {
             deal.CreatedDate = DateTime.Now;
 
-            _context.Deals.Add(deal);
+            await _context.Deals.AddAsync(deal);
 
             var saveResult = await _context.SaveChangesAsync();
 

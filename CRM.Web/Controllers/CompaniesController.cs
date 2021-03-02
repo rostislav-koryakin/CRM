@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
 using CRM.Web.ViewModels;
+using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
 {
     public class CompaniesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ICompaniesService _compmaniesServices;
 
-        public CompaniesController(AppDbContext context)
+        public CompaniesController(AppDbContext context, ICompaniesService companiesService)
         {
             _context = context;
+            _compmaniesServices = companiesService;
         }
 
         // GET: Companies
@@ -39,85 +41,35 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var appDbContext = _context.Companies.AsQueryable();
+            var companies = await _compmaniesServices.GetCompanies(sortOrder, searchString, currentFilter, pageNumber);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                appDbContext = appDbContext.Where(c => c.Name.Contains(searchString)
-                                                    || c.City.Contains(searchString)
-                                                    || c.TaxpayerNumber.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.Name);
-                    break;
-                case "TaxpayerNumber":
-                    appDbContext = appDbContext.OrderBy(c => c.TaxpayerNumber);
-                    break;
-                case "taxpayer_number_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.TaxpayerNumber);
-                    break;
-                case "City":
-                    appDbContext = appDbContext.OrderBy(c => c.City);
-                    break;
-                case "city_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.City);
-                    break;
-                case "Street":
-                    appDbContext = appDbContext.OrderBy(c => c.Street);
-                    break;
-                case "street_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.Street);
-                    break;
-                case "ZipCode":
-                    appDbContext = appDbContext.OrderBy(c => c.ZipCode);
-                    break;
-                case "zip_code_desc":
-                    appDbContext = appDbContext.OrderByDescending(c => c.ZipCode);
-                    break;
-                default:
-                    appDbContext = appDbContext.OrderBy(c => c.Name);
-                    break;
-            }
-
-            int pageSize = 10;
-            return View(await PaginatedList<Company>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(companies);
         }
 
         // GET: Companies/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var company = _context.Companies
-                .Where(c => c.Id == id)
-                .Include(c => c.Contacts)
-                .Include(c => c.Deals)
-                .ToList();
+            var company = await _compmaniesServices.GetCompanyById(id);
 
             if (company == null)
             {
                 return NotFound();
             }
 
-            CompanyViewModel companyViewModel = new CompanyViewModel();
-            companyViewModel.Company = company.FirstOrDefault();
-
-            foreach (Company c in company)
+            var companyViewModel = new CompanyViewModel
             {
-                companyViewModel.Contacts = c.Contacts;
-                companyViewModel.Deals = c.Deals;
-            }
+                Company = company,
+                Contacts = company.Contacts,
+                Deals = company.Deals
+            };
 
             return View(companyViewModel);
         }
-
-
 
         // GET: Companies/Create
         public IActionResult Create()
@@ -130,13 +82,19 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] Company company)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(company);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(company);
+
+            var successful = await _compmaniesServices.CreateCompany(company);
+
+            if (!successful)
+            {
+                return BadRequest("Could not add Company.");
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Companies/Edit/5
@@ -147,11 +105,13 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var company = await _context.Companies.FindAsync(id);
+            var company = await _compmaniesServices.GetCompanyById(id);
+            
             if (company == null)
             {
                 return NotFound();
             }
+            
             return View(company);
         }
 
@@ -169,18 +129,18 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    _context.Update(company);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompanyExists(company.Id))
+                    var result = await _compmaniesServices.UpdateCompany(company);
+
+                    if (result == false)
                     {
                         return NotFound();
                     }
-                    else
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!(await _compmaniesServices.CompanyExists(company.Id)))
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -196,8 +156,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var company = await _compmaniesServices.GetCompanyById(id);
+
             if (company == null)
             {
                 return NotFound();
@@ -209,17 +169,21 @@ namespace CRM.Web.Controllers
         // POST: Companies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private bool CompanyExists(int id)
-        {
-            return _context.Companies.Any(e => e.Id == id);
+            var result = await _compmaniesServices.DeleteCompany(id);
+
+            if (result == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
