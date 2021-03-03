@@ -5,23 +5,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
 {
     public class DealProductsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IDealProductsService _dealsProductsServices;
 
-        public DealProductsController(AppDbContext context)
+        public DealProductsController(AppDbContext context, IDealProductsService dealProductsService)
         {
             _context = context;
+            _dealsProductsServices = dealProductsService;
         }
 
         // GET: DealProducts
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.DealProducts.Include(d => d.Deal).Include(d => d.Product);
-            return View(await appDbContext.ToListAsync());
+            var dealsItems = await _dealsProductsServices.GetDealsItems();
+            
+            return View(dealsItems);
         }
 
         // GET: DealProducts/Details/5
@@ -32,10 +36,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var dealProduct = await _context.DealProducts
-                .Include(d => d.Deal)
-                .Include(d => d.Product)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var dealProduct = await _dealsProductsServices.GetDealItemById(id);
+            
             if (dealProduct == null)
             {
                 return NotFound();
@@ -49,6 +51,7 @@ namespace CRM.Web.Controllers
         {
             ViewData["DealId"] = new SelectList(_context.Deals, "Id", "Name");
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name");
+            
             return View();
         }
 
@@ -57,15 +60,22 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DealId,ProductId,Id,CreatedDate,UpdatedDate,Quantity")] DealProduct dealProduct)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(dealProduct);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
+
+            var successful = await _dealsProductsServices.CreateDealItem(dealProduct);
+
+            if (!successful)
+            {
+                return BadRequest("Could not add Deal Item.");
+            }
+
             ViewData["DealId"] = new SelectList(_context.Deals, "Id", "Name", dealProduct.DealId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", dealProduct.ProductId);
-            return View(dealProduct);
+
+            return RedirectToAction("Index");
         }
 
         // GET: DealProducts/Edit/5
@@ -76,13 +86,16 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var dealProduct = await _context.DealProducts.FindAsync(id);
+            var dealProduct = await _dealsProductsServices.GetDealItemById(id);
+            
             if (dealProduct == null)
             {
                 return NotFound();
             }
+            
             ViewData["DealId"] = new SelectList(_context.Deals, "Id", "Name", dealProduct.DealId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", dealProduct.ProductId);
+            
             return View(dealProduct);
         }
 
@@ -100,24 +113,26 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    _context.Update(dealProduct);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DealProductExists(dealProduct.Id))
+                    var result = await _dealsProductsServices.UpdateDealItem(dealProduct);
+
+                    if (result == false)
                     {
                         return NotFound();
                     }
-                    else
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!(await _dealsProductsServices.DealItemExists(dealProduct.Id)))
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["DealId"] = new SelectList(_context.Deals, "Id", "Name", dealProduct.DealId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", dealProduct.ProductId);
+            
             return View(dealProduct);
         }
 
@@ -129,10 +144,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var dealProduct = await _context.DealProducts
-                .Include(d => d.Deal)
-                .Include(d => d.Product)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var dealProduct = await _dealsProductsServices.GetDealItemById(id);
+
             if (dealProduct == null)
             {
                 return NotFound();
@@ -144,17 +157,21 @@ namespace CRM.Web.Controllers
         // POST: DealProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var dealProduct = await _context.DealProducts.FindAsync(id);
-            _context.DealProducts.Remove(dealProduct);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private bool DealProductExists(int id)
-        {
-            return _context.DealProducts.Any(e => e.Id == id);
+            var result = await _dealsProductsServices.DeleteDealItem(id);
+
+            if (result == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

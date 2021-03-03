@@ -24,6 +24,7 @@ namespace CRM.Web
             services.AddScoped<IActivitiesService, ActivitiesService>();
             services.AddScoped<ICompaniesService, CompaniesService>();
             services.AddScoped<IContactsService, ContactsService>();
+            services.AddScoped<IDealProductsService, DealProductsService>();
             services.AddScoped<IDealsService, DealsService>();
 
             services.AddControllersWithViews();
