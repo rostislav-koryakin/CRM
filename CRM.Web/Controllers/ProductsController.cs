@@ -5,16 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
+using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IProductsService _productsService;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(AppDbContext context, IProductsService productsService)
         {
             _context = context;
+            _productsService = productsService;
         }
 
         // GET: Products
@@ -35,31 +38,9 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var appDbContext = _context.Products.AsQueryable();
+            var products = await _productsService.GetProducts(sortOrder, searchString, currentFilter, pageNumber);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                appDbContext = appDbContext.Where(p => p.Name.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    appDbContext = appDbContext.OrderByDescending(p => p.Name);
-                    break;
-                case "Price":
-                    appDbContext = appDbContext.OrderBy(p => p.Price);
-                    break;
-                case "price_desc":
-                    appDbContext = appDbContext.OrderByDescending(p => p.Price);
-                    break;
-                default:
-                    appDbContext = appDbContext.OrderBy(p => p.Name);
-                    break;
-            }
-
-            int pageSize = 10;
-            return View(await PaginatedList<Product>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -70,8 +51,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productsService.GetProductById(id);
+            
             if (product == null)
             {
                 return NotFound();
@@ -91,13 +72,19 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,Price,Id,CreatedDate,UpdatedDate")] Product product)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(product);
+
+            var successful = await _productsService.CreateProduct(product);
+
+            if (!successful)
+            {
+                return BadRequest("Could not add Product.");
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Products/Edit/5
@@ -108,11 +95,13 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productsService.GetProductById(id);
+
             if (product == null)
             {
                 return NotFound();
             }
+
             return View(product);
         }
 
@@ -130,18 +119,18 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
+                    var result = await _productsService.UpdateProduct(product);
+
+                    if (result == false)
                     {
                         return NotFound();
                     }
-                    else
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!(await _productsService.ProductExists(id)))
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -157,8 +146,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _productsService.GetProductById(id);
+
             if (product == null)
             {
                 return NotFound();
@@ -170,17 +159,21 @@ namespace CRM.Web.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
+            var result = await _productsService.DeleteProduct(id);
+
+            if (result == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
