@@ -27,6 +27,7 @@ namespace CRM.Web
             services.AddScoped<IDealProductsService, DealProductsService>();
             services.AddScoped<IDealsService, DealsService>();
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<ISalesmenService, SalesmenService>();
 
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer((Configuration.GetConnectionString("Default"))));

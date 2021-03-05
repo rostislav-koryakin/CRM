@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
 using CRM.Infrastructure.Data;
 using CRM.Web.ViewModels;
+using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
 {
     public class SalesmenController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ISalesmenService _salesmanServiece;
 
-        public SalesmenController(AppDbContext context)
+        public SalesmenController(AppDbContext context, ISalesmenService salesmenService)
         {
             _context = context;
+            _salesmanServiece = salesmenService;
         }
 
         // GET: Salesmen
@@ -39,86 +40,32 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var appDbContext = _context.Salesmen.AsQueryable();
+            var salesmen = await _salesmanServiece.GetSalesmen(sortOrder, searchString, currentFilter, pageNumber);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                appDbContext = appDbContext.Where(s => s.FirstName.Contains(searchString)
-                                                    || s.LastName.Contains(searchString)
-                                                    || s.Email.Contains(searchString));
-            }
-
-            switch (sortOrder)
-            {
-                case "first_name_desc":
-                    appDbContext = appDbContext.OrderByDescending(s => s.FirstName);
-                    break;
-                case "LastName":
-                    appDbContext = appDbContext.OrderBy(s => s.LastName);
-                    break;
-                case "last_name_desc":
-                    appDbContext = appDbContext.OrderByDescending(s => s.LastName);
-                    break;
-                case "Phone":
-                    appDbContext = appDbContext.OrderBy(s => s.Phone);
-                    break;
-                case "phone_desc":
-                    appDbContext = appDbContext.OrderByDescending(s => s.Phone);
-                    break;
-                case "Email":
-                    appDbContext = appDbContext.OrderBy(s => s.Email);
-                    break;
-                case "email_desc":
-                    appDbContext = appDbContext.OrderByDescending(s => s.Email);
-                    break;
-                default:
-                    appDbContext = appDbContext.OrderBy(s => s.FirstName);
-                    break;
-            }
-
-            int pageSize = 10;
-            return View(await PaginatedList<Salesman>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(salesmen);
         }
 
         // GET: Salesmen/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var salesman = _context.Salesmen
-                .Where(s => s.Id == id)
-                .Include(s => s.Activities)
-                .Include(s => s.Deals)
-                .ToList();
+            var salesman = await _salesmanServiece.GetSalesmanlById(id);
 
             if (salesman == null)
             {
                 return NotFound();
             }
 
-            SalesmanViewModel salesmanViewModel = new SalesmanViewModel();
-            salesmanViewModel.Salesman = salesman.FirstOrDefault();
-            
-            List<Activity> activities = new List<Activity>();
-            List<Deal> deals = new List<Deal>();
-
-            foreach (Salesman s in salesman)
+            var salesmanViewModel = new SalesmanViewModel
             {
-                foreach (Activity activity in s.Activities)
-                {
-                    activities.Add(activity);
-                }
-                foreach (Deal deal in s.Deals)
-                {
-                    deals.Add(deal);
-                }
-            }
-
-            salesmanViewModel.Activities = activities;
-            salesmanViewModel.Deals = deals;
+                Salesman = salesman,
+                Activities = salesman.Activities,
+                Deals = salesman.Deals
+            };
 
             return View(salesmanViewModel);
         }
@@ -136,13 +83,19 @@ namespace CRM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,Phone,Email,Id,CreatedDate,UpdatedDate")] Salesman salesman)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(salesman);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
-            return View(salesman);
+
+            var successful = await _salesmanServiece.CreateSalesman(salesman);
+
+            if (!successful)
+            {
+                return BadRequest("Could not add Salesman.");
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Salesmen/Edit/5
@@ -153,11 +106,13 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var salesman = await _context.Salesmen.FindAsync(id);
+            var salesman = await _salesmanServiece.GetSalesmanlById(id);
+
             if (salesman == null)
             {
                 return NotFound();
             }
+
             return View(salesman);
         }
 
@@ -177,18 +132,18 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    _context.Update(salesman);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SalesmanExists(salesman.Id))
+                    var result = await _salesmanServiece.UpdateSalesman(salesman);
+
+                    if (result == false)
                     {
                         return NotFound();
                     }
-                    else
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!(await _salesmanServiece.SalesmanExists(salesman.Id)))
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -204,8 +159,8 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var salesman = await _context.Salesmen
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var salesman = await _salesmanServiece.GetSalesmanlById(id);
+
             if (salesman == null)
             {
                 return NotFound();
@@ -217,17 +172,21 @@ namespace CRM.Web.Controllers
         // POST: Salesmen/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var salesman = await _context.Salesmen.FindAsync(id);
-            _context.Salesmen.Remove(salesman);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        private bool SalesmanExists(int id)
-        {
-            return _context.Salesmen.Any(e => e.Id == id);
+            var result = await _salesmanServiece.DeleteSalesman(id);
+
+            if (result == false)
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
