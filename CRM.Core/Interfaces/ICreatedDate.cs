@@ -4,6 +4,6 @@ namespace CRM.Core.Interfaces
 {
     public interface ICreatedDate
     {
-        DateTime CreatedDate { get; set; }
+        DateTime? CreatedDate { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace CRM.Core.Entities
 
         public string ZipCode { get; set; }
 
-        public int Score { get; set; }
+        public int? Score { get; set; }
 
         public virtual List<Contact> Contacts { get; set; }
 
