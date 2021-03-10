@@ -88,7 +88,7 @@ namespace CRM.Infrastructure.Data.Config
                         ContactId = 1,
                         SalesmanId = 3,
                         Name = "The Stones Project Y",
-                        TotalAmount = 20039499.0M,
+                        TotalAmount = 1000000.0M,
                         Description = "Description",
                         Stage = Deal.DealStage.Offer
                     },

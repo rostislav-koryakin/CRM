@@ -46,7 +46,7 @@ namespace CRM.Infrastructure.Data.Config
                 .HasOne(c => c.Company)
                 .WithMany(c => c.Contacts)
                 .HasForeignKey(c => c.CompanyId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entityTypeBuilder
                 .HasIndex(c => new { c.FirstName, c.LastName });

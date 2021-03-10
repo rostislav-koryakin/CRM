@@ -18,13 +18,13 @@ namespace CRM.Infrastructure.Data.Config
                 .HasOne(dp => dp.Deal)
                 .WithMany(d => d.DealsProducts)
                 .HasForeignKey(dp => dp.DealId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entityTypeBuilder
                 .HasOne(dp => dp.Product)
                 .WithMany(p => p.DealsProducts)
                 .HasForeignKey(dp => dp.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entityTypeBuilder
                 .HasData(
