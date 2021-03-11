@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CRM.Core.Entities.ScoreRule>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary btn-sm">Add New Rule</a>
+    <a asp-action="" class="btn btn-primary btn-sm">Apply All Rules</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Criteria</th>
+            <th>Relation Symbol</th>
+            <th>Value</th>
+            <th>Points</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr onclick="location.href = '@(Url.Action("Details", "ScoreRules", new { id = item.Id }))'">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Criteria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RelationSymbol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Points)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

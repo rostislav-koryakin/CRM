@@ -1,0 +1,47 @@
+﻿@model CRM.Core.Entities.ScoreRule
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Create new Score Rule</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                    <label asp-for="Criteria" class="control-label"></label>
+                    <select asp-for="Criteria" class="form-control" asp-items="Html.GetEnumSelectList<CRM.Core.Entities.ScoreRule.RuleCriteria>()">
+                        <option selected="selected" value="">---Select Criteria---</option>
+                    </select>
+                    <span asp-validation-for="Criteria" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelationSymbol" class="control-label"></label>
+                <select asp-for="RelationSymbol" class="form-control" asp-items="Html.GetEnumSelectList<CRM.Core.Entities.ScoreRule.ScoreRelationSymbol>()">
+                    <option selected="selected" value="">---Select Relation---</option>
+                </select>
+                <span asp-validation-for="RelationSymbol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Value" class="control-label">Value</label>
+                <input asp-for="Value" class="form-control" />
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Points" class="control-label">Points</label>
+                <input asp-for="Points" class="form-control" />
+                <span asp-validation-for="Points" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

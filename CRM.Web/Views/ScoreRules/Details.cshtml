@@ -1,0 +1,59 @@
+﻿@model CRM.Core.Entities.ScoreRule
+
+@{
+    ViewData["Title"] = "ScoreRule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div class="button-panel">
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
+        </p>
+        <p>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+        </p>
+        <p>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Delete</a>
+        </p>
+    </div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Criteria
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Criteria)
+        </dd>
+        <dt class="col-sm-2">
+            Relation Symbol
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RelationSymbol)
+        </dd>
+        <dt class="col-sm-2">
+            Value
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+        <dt class="col-sm-2">
+            Points
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+        <dt class="col-sm-2">
+            Created Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt class="col-sm-2">
+            Updated Date
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UpdatedDate)
+        </dd>
+    </dl>
+</div>
