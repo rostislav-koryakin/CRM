@@ -18,5 +18,9 @@ namespace CRM.Web.Services
 
         public Task<bool> RuleExists(int id);
 
+        public Task<int> CalculateScoreRule(Company company);
+
+        public Task<int> ApplyScoreRulesForAllCompanies();
+
     }
 }

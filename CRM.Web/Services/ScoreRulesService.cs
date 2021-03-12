@@ -3,7 +3,6 @@ using CRM.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CRM.Web.Services
@@ -65,5 +64,51 @@ namespace CRM.Web.Services
             return await _context.ScoreRules.AnyAsync(i => i.Id == id);
         }
 
+        public async Task<int> CalculateScoreRule(Company company)
+        {
+            int score = 0;
+
+            string industry = company.Industry.ToString();
+            string country = company.Country;
+            int size = company.NoOfEmployees;
+
+            var scoreRules = await GetRules();
+
+            foreach (var rule in scoreRules)
+            {
+                if (rule.Criteria.ToString() == "Industry")
+                {
+                    if (industry == rule.Value) score += rule.Points;
+                }
+                else if (rule.Criteria.ToString() == "Country")
+                {
+                    if (country == rule.Value) score += rule.Points;
+                }
+                else if (rule.Criteria.ToString() == "Size")
+                {
+                    var sizeRule = int.Parse(rule.Value);
+
+                    if (size == sizeRule && rule.RelationSymbol == ScoreRule.ScoreRelationSymbol.Equals) score += rule.Points;
+                    else if (size > sizeRule && rule.RelationSymbol == ScoreRule.ScoreRelationSymbol.IsGreater) score += rule.Points;
+                    else if (size < sizeRule && rule.RelationSymbol == ScoreRule.ScoreRelationSymbol.IsLess) score += rule.Points;
+                }
+            }
+            return score;
+        }
+
+        public async Task<int> ApplyScoreRulesForAllCompanies()
+        {
+            var companies = await _context.Companies.ToListAsync();
+
+            foreach(var company in companies)
+            {
+                int score = await CalculateScoreRule(company);
+                company.Score = score;
+                _context.Update(company);
+                await _context.SaveChangesAsync();
+            }
+
+            return 0;
+        }
     }
 }

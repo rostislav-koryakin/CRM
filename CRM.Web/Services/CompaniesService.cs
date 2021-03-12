@@ -2,6 +2,7 @@
 using CRM.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,10 +11,12 @@ namespace CRM.Web.Services
     public class CompaniesService : ICompaniesService
     {
         private readonly AppDbContext _context;
+        private readonly IScoreRulesService _scoreRulesService;
 
-        public CompaniesService(AppDbContext context)
+        public CompaniesService(AppDbContext context, IScoreRulesService scoreRulesService)
         {
             _context = context;
+            _scoreRulesService = scoreRulesService;
         }
 
         public async Task<PaginatedList<Company>> GetCompanies(string sortOrder, string searchString, string currentFilter, int? pageNumber)
@@ -78,7 +81,8 @@ namespace CRM.Web.Services
         public async Task<bool> CreateCompany(Company company)
         {
             company.CreatedDate = DateTime.Now;
-            
+            company.Score = await _scoreRulesService.CalculateScoreRule(company);
+
             await _context.AddAsync(company);
             
             var saveResult = await _context.SaveChangesAsync();
@@ -89,6 +93,7 @@ namespace CRM.Web.Services
         public async Task<bool> UpdateCompany(Company company)
         {
             company.UpdatedDate = DateTime.Now;
+            company.Score = await _scoreRulesService.CalculateScoreRule(company);
 
             _context.Update(company);
 

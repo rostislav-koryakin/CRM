@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Core.Entities;
-using CRM.Infrastructure.Data;
-using CRM.Web.ViewModels;
 using CRM.Web.Services;
 
 namespace CRM.Web.Controllers
@@ -157,6 +154,14 @@ namespace CRM.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ApplyScoreRulesForAllCompanies()
+        {
+            await _scoreRulesService.ApplyScoreRulesForAllCompanies();
+
+            return RedirectToAction("Index");
         }
     }
 }
