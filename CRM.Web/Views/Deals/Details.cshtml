@@ -1,4 +1,4 @@
-﻿@model CRM.Web.ViewModels.DealViewModel
+﻿@model DealViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -8,6 +8,9 @@
 <div>
     <div class="button-panel">
         <h3>@Html.DisplayFor(model => model.Deal.Name)</h3>
+        <p>
+            <a asp-action="GenerateSalesQuote" asp-route-id="@Model.Deal.Id" class="btn btn-primary btn-sm">Quote</a>
+        </p>
         <p>
             <a asp-action="Edit" asp-route-id="@Model.Deal.Id" class="btn btn-primary btn-sm">Edit</a>
         </p>

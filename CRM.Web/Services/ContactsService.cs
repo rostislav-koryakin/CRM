@@ -1,9 +1,10 @@
-﻿using CRM.Core.Entities;
-using CRM.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using CRM.Web.Models.Entities;
+using CRM.Web.Data;
 
 namespace CRM.Web.Services
 {
@@ -66,7 +67,7 @@ namespace CRM.Web.Services
 
             int pageSize = 10;
             
-            return await PaginatedList<Contact>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
+            return await PaginatedList<Contact>.CreateAsync((IQueryable<Contact>)appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
         public async Task<Contact> GetContactById(int? id)

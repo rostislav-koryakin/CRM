@@ -1,9 +1,9 @@
-﻿using CRM.Core.Entities;
-using CRM.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using CRM.Web.Models.Entities;
+using CRM.Web.Data;
 
 namespace CRM.Web.Services
 {

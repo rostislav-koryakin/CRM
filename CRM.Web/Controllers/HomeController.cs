@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CRM.Web.ViewModels;
-using CRM.Infrastructure.Data;
+using CRM.Web.Models.ViewModels;
+using CRM.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -32,10 +32,10 @@ namespace CRM.Web.Controllers
             var query = from d in _context.Deals
                         group d by d.Stage into g
                         where
-                            g.Key == Core.Entities.Deal.DealStage.Analisis ||
-                            g.Key == Core.Entities.Deal.DealStage.Offer ||
-                            g.Key == Core.Entities.Deal.DealStage.Negotiation ||
-                            g.Key == Core.Entities.Deal.DealStage.Won
+                            g.Key == Models.Entities.Deal.DealStage.Analisis ||
+                            g.Key == Models.Entities.Deal.DealStage.Offer ||
+                            g.Key == Models.Entities.Deal.DealStage.Negotiation ||
+                            g.Key == Models.Entities.Deal.DealStage.Won
                         orderby g.Key
                         select new
                         {

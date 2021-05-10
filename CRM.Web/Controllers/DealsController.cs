@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CRM.Core.Entities;
-using CRM.Infrastructure.Data;
-using CRM.Web.ViewModels;
+using CRM.Web.Models.Entities;
+using CRM.Web.Models.ViewModels;
 using CRM.Web.Services;
+using CRM.Web.Data;
 
 namespace CRM.Web.Controllers
 {
@@ -217,6 +217,14 @@ namespace CRM.Web.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GenerateSalesQuote(int id)
+        {
+            var file = await _dealsService.CreateQuotePDF(id);
+
+            return File(file, "application/pdf", "Quote.pdf");
         }
     }
 }

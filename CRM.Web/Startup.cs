@@ -1,5 +1,7 @@
-using CRM.Infrastructure.Data;
+using CRM.Web.Data;
 using CRM.Web.Services;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +31,9 @@ namespace CRM.Web
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<ISalesmenService, SalesmenService>();
             services.AddScoped<IScoreRulesService, ScoreRulesService>();
-
             services.AddControllersWithViews();
-
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer((Configuration.GetConnectionString("Default"))));
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,11 +51,8 @@ namespace CRM.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

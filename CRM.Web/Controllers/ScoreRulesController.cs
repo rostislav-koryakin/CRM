@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CRM.Core.Entities;
+using CRM.Web.Models.Entities;
 using CRM.Web.Services;
 
 namespace CRM.Web.Controllers

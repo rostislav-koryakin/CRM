@@ -1,4 +1,4 @@
-﻿@model CRM.Core.Entities.Deal
+﻿@model Deal
 
 @{
     ViewData["Title"] = "Edit";
@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Stage" class="control-label"></label>
-                <select asp-for="Stage" class="form-control" asp-items="Html.GetEnumSelectList<CRM.Core.Entities.Deal.DealStage>()">
+                <select asp-for="Stage" class="form-control" asp-items="Html.GetEnumSelectList<Deal.DealStage>()">
                 </select>
                 <span asp-validation-for="Stage" class="text-danger"></span>
             </div>

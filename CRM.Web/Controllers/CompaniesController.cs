@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CRM.Core.Entities;
-using CRM.Infrastructure.Data;
-using CRM.Web.ViewModels;
 using CRM.Web.Services;
+using CRM.Web.Data;
+using CRM.Web.Models.ViewModels;
+using CRM.Web.Models.Entities;
 
 namespace CRM.Web.Controllers
 {

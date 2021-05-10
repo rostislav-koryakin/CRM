@@ -1,6 +1,6 @@
-﻿using CRM.Core.Entities;
-using System.Collections.Generic;
+﻿using CRM.Web.Models.Entities;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CRM.Web.Services
 {

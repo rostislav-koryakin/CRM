@@ -1,4 +1,4 @@
-﻿using CRM.Core.Entities;
+﻿using CRM.Web.Models.Entities;
 using System.Threading.Tasks;
 
 namespace CRM.Web.Services
@@ -16,5 +16,7 @@ namespace CRM.Web.Services
         public Task<bool> DeleteDeal(int? id);
 
         public Task<bool> DealExists(int id);
+
+        public Task<byte[]> CreateQuotePDF(int id);
     }
 }
