@@ -26,41 +26,60 @@ namespace CRM.Web.Data.Config
                 .IsUnique();
 
             entityTypeBuilder
+                .Property(p => p.Description)
+                .HasColumnType("varchar(255)");
+
+            entityTypeBuilder
+                .Property(p => p.VAT)
+                .IsRequired()
+                .HasColumnType("decimal(18, 2)");
+
+            entityTypeBuilder
                 .HasData(
                     new Product
                     {
                         Id = 1,
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Digital Marketing",
-                        Price = 10000.0M
+                        Price = 10000.0M,
+                        Description = "",
+                        VAT = 20.0M
                     },
                     new Product
                     {
                         Id = 2,
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Branding",
-                        Price = 20000.0M
+                        Price = 20000.0M,
+                        Description = "",
+                        VAT = 20.0M
                     },
                     new Product
                     {
                         Id = 3,
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Content Creation",
-                        Price = 30000.0M
+                        Price = 30000.0M,
+                        Description = "",
+                        VAT = 20.0M
                     },
                     new Product
                     {
                         Id = 4,
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Strategic Planning",
-                        Price = 40000.0M
+                        Price = 40000.0M,
+                        Description = "",
+                        VAT = 20.0M
                     },
                     new Product
                     {
                         Id = 5,
                         CreatedDate = new DateTime(2020, 9, 16, 8, 30, 0),
                         Name = "Rebranding",
-                        Price = 10000.0M
+                        Price = 10000.0M,
+                        Description = "",
+                        VAT = 20.0M
                     }
                 );
         }

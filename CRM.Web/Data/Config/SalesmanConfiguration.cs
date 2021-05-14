@@ -31,6 +31,10 @@ namespace CRM.Web.Data.Config
                 .HasColumnType("varchar(127)");
 
             entityTypeBuilder
+                .Property(s => s.MonthlySalesGoal)
+                .HasColumnType("decimal(18, 2)");
+
+            entityTypeBuilder
                 .HasIndex(s => new { s.FirstName, s.LastName });
 
             entityTypeBuilder

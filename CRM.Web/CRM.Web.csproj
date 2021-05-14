@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20210514153521_004.cs" />
+    <Compile Remove="Data\Migrations\20210514153521_004.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DinkToPdf.Standard" Version="1.1.0" />
     <PackageReference Include="Highsoft.Highcharts" Version="8.2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.7" />
