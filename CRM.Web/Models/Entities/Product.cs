@@ -8,6 +8,10 @@ namespace CRM.Web.Models.Entities
 
         public decimal Price { get; set; }
 
+        public string Description { get; set; }
+
+        public decimal VAT { get; set; }
+
         public virtual List<DealProduct> DealsProducts { get; set; }
     }
 }

@@ -12,6 +12,8 @@ namespace CRM.Web.Models.Entities
 
         public string Email { get; set; }
 
+        public decimal MonthlySalesGoal { get; set;  }
+
         public virtual List<Activity> Activities { get; set; }
 
         public virtual List<Deal> Deals { get; set; }
