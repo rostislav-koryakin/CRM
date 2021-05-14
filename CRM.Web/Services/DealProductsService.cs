@@ -17,7 +17,7 @@ namespace CRM.Web.Services
             _context = context;
         }
 
-        public async Task<List<DealProduct>> GetDealsItems()
+        public async Task<IEnumerable<DealProduct>> GetAll()
         {
             return await _context.DealProducts
                 .Include(d => d.Deal)
@@ -25,7 +25,7 @@ namespace CRM.Web.Services
                 .ToListAsync();
         }
 
-        public async Task<DealProduct> GetDealItemById(int? id)
+        public async Task<DealProduct> GetById(int? id)
         {
             return await _context.DealProducts
                 .Include(d => d.Deal)
@@ -33,7 +33,7 @@ namespace CRM.Web.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<bool> CreateDealItem(DealProduct dealProduct)
+        public async Task<bool> Create(DealProduct dealProduct)
         {
             dealProduct.CreatedDate = DateTime.Now;
             
@@ -48,7 +48,7 @@ namespace CRM.Web.Services
             return saveResult == 1 && sumResult;
         }
 
-        public async Task<bool> UpdateDealItem(DealProduct dealProduct)
+        public async Task<bool> Update(DealProduct dealProduct)
         {
             dealProduct.UpdatedDate = DateTime.Now;
 
@@ -63,9 +63,9 @@ namespace CRM.Web.Services
             return saveResult == 1 && sumResult;
         }
 
-        public async Task<bool> DeleteDealItem(int? id)
+        public async Task<bool> Delete(int? id)
         {
-            var dealItem = await GetDealItemById(id);
+            var dealItem = await GetById(id);
 
             var dealId = dealItem.Deal.Id;
 
@@ -78,7 +78,7 @@ namespace CRM.Web.Services
             return deleteResult == 1 && sumResult;
         }
 
-        public async Task<bool> DealItemExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.DealProducts.AnyAsync(i => i.Id == id);
         }
@@ -105,6 +105,11 @@ namespace CRM.Web.Services
             var saveResult = await _context.SaveChangesAsync();
 
             return saveResult >= 1;
+        }
+
+        public Task<PaginatedList<DealProduct>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        {
+            throw new NotImplementedException();
         }
     }
 }

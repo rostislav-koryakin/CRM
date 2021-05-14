@@ -16,17 +16,17 @@ namespace CRM.Web.Services
             _context = context;
         }
 
-        public async Task<List<ScoreRule>> GetRules()
+        public async Task<IEnumerable<ScoreRule>> GetAll()
         {
             return await _context.ScoreRules.ToListAsync();
         }
 
-        public async Task<ScoreRule> GetRuleById(int? id)
+        public async Task<ScoreRule> GetById(int? id)
         {
             return await _context.ScoreRules.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task<bool> CreateRule(ScoreRule rule)
+        public async Task<bool> Create(ScoreRule rule)
         {
             rule.CreatedDate = DateTime.Now;
 
@@ -37,7 +37,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateRule(ScoreRule rule)
+        public async Task<bool> Update(ScoreRule rule)
         {
             rule.UpdatedDate = DateTime.Now;
 
@@ -48,9 +48,9 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteRule(int? id)
+        public async Task<bool> Delete(int? id)
         {
-            var rule = await GetRuleById(id);
+            var rule = await GetById(id);
 
             _context.ScoreRules.Remove(rule);
 
@@ -59,7 +59,7 @@ namespace CRM.Web.Services
             return deleteResult == 1;
         }
 
-        public async Task<bool> RuleExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.ScoreRules.AnyAsync(i => i.Id == id);
         }
@@ -72,7 +72,7 @@ namespace CRM.Web.Services
             string country = company.Country;
             int size = company.NoOfEmployees;
 
-            var scoreRules = await GetRules();
+            var scoreRules = await GetAll();
 
             foreach (var rule in scoreRules)
             {
@@ -109,6 +109,11 @@ namespace CRM.Web.Services
             }
 
             return 0;
+        }
+
+        public Task<PaginatedList<ScoreRule>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        {
+            throw new NotImplementedException();
         }
     }
 }

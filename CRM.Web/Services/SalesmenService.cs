@@ -17,7 +17,15 @@ namespace CRM.Web.Services
             _context = context;
         }
 
-        public async Task<PaginatedList<Salesman>> GetSalesmen(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IEnumerable<Salesman>> GetAll()
+        {
+            return await _context.Salesmen
+                .Include(s => s.Activities)
+                .Include(s => s.Deals)
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<Salesman>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             var appDbContext = _context.Salesmen.AsQueryable();
 
@@ -61,7 +69,7 @@ namespace CRM.Web.Services
             return await PaginatedList<Salesman>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
-        public async Task<Salesman> GetSalesmanlById(int? id)
+        public async Task<Salesman> GetById(int? id)
         {
             return await _context.Salesmen
                 .Where(s => s.Id == id)
@@ -70,7 +78,7 @@ namespace CRM.Web.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> CreateSalesman(Salesman salesman)
+        public async Task<bool> Create(Salesman salesman)
         {
             salesman.CreatedDate = DateTime.Now;
 
@@ -81,7 +89,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateSalesman(Salesman salesman)
+        public async Task<bool> Update(Salesman salesman)
         {
             salesman.UpdatedDate = DateTime.Now;
 
@@ -92,7 +100,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteSalesman(int? id)
+        public async Task<bool> Delete(int? id)
         {
             var salesman = await _context.Salesmen.FindAsync(id);
 
@@ -103,7 +111,7 @@ namespace CRM.Web.Services
             return deleteResult == 1;
         }
 
-        public async Task<bool> SalesmanExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.Salesmen.AnyAsync(d => d.Id == id);
         }

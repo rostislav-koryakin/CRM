@@ -23,7 +23,16 @@ namespace CRM.Web.Services
             _converter = converter;
         }
 
-        public async Task<PaginatedList<Deal>> GetDeals(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IEnumerable<Deal>> GetAll()
+        {
+            return await _context.Deals
+                .Include(d => d.Company)
+                .Include(d => d.Contact)
+                .Include(d => d.Salesman)
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<Deal>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             var appDbContext = _context.Deals
                 .Include(d => d.Company)
@@ -84,9 +93,9 @@ namespace CRM.Web.Services
             return await PaginatedList<Deal>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
-        public async Task<Deal> GetDealById(int? id)
+        public async Task<Deal> GetById(int? id)
         {
-            var deal = await _context.Deals
+            return await _context.Deals
                 .Where(d => d.Id == id)
                 .Include(d => d.DealsProducts)
                     .ThenInclude(d => d.Product)
@@ -94,11 +103,9 @@ namespace CRM.Web.Services
                 .Include(d => d.Company)
                 .Include(d => d.Salesman)
                 .FirstOrDefaultAsync();
-
-            return deal;
         }
 
-        public async Task<bool> CreateDeal(Deal deal)
+        public async Task<bool> Create(Deal deal)
         {
             deal.CreatedDate = DateTime.Now;
 
@@ -109,7 +116,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateDeal(Deal deal)
+        public async Task<bool> Update(Deal deal)
         {
             deal.UpdatedDate = DateTime.Now;
 
@@ -120,7 +127,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteDeal(int? id)
+        public async Task<bool> Delete(int? id)
         {
             var deal = await _context.Deals.FindAsync(id);
             
@@ -131,7 +138,7 @@ namespace CRM.Web.Services
             return deleteResult == 1;
         }
 
-        public async Task<bool> DealExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.Deals.AnyAsync(d => d.Id == id);
         }
@@ -164,10 +171,9 @@ namespace CRM.Web.Services
             return file;
         }
     
-
         public async Task<string> GetHTMLQuoteTemplate(int id)
         {
-            var deal = await GetDealById(id);
+            var deal = await GetById(id);
 
             var sb = new StringBuilder();
             sb.Append(@"

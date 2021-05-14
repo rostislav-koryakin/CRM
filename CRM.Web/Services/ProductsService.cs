@@ -17,7 +17,13 @@ namespace CRM.Web.Services
             _context = context;
         }
 
-        public async Task<PaginatedList<Product>> GetProducts(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IEnumerable<Product>> GetAll()
+        {
+            return await _context.Products
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<Product>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             var appDbContext = _context.Products.AsQueryable();
 
@@ -47,14 +53,14 @@ namespace CRM.Web.Services
             return await PaginatedList<Product>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
-        public async Task<Product> GetProductById(int? id)
+        public async Task<Product> GetById(int? id)
         {
             return await _context.Products
                 .Where(d => d.Id == id)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> CreateProduct(Product product)
+        public async Task<bool> Create(Product product)
         {
             product.CreatedDate = DateTime.Now;
 
@@ -65,7 +71,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateProduct(Product product)
+        public async Task<bool> Update(Product product)
         {
             product.UpdatedDate = DateTime.Now;
 
@@ -76,7 +82,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteProduct(int? id)
+        public async Task<bool> Delete(int? id)
         {
             var product = await _context.Products.FindAsync(id);
 
@@ -86,7 +92,7 @@ namespace CRM.Web.Services
 
             return deleteResult == 1;
         }
-        public async Task<bool> ProductExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.Products.AnyAsync(d => d.Id == id);
         }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CRM.Web.Models.Entities;
 using CRM.Web.Data;
+using System.Collections.Generic;
 
 namespace CRM.Web.Services
 {
@@ -16,7 +17,15 @@ namespace CRM.Web.Services
             _context = context;
         }
 
-        public async Task<PaginatedList<Activity>> GetActivities(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IEnumerable<Activity>> GetAll()
+        {
+            return await _context.Activities
+                .Include(a => a.Contact)
+                .Include(a => a.Salesman)
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<Activity>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             var appDbContext = _context.Activities
                 .Include(a => a.Contact)
@@ -75,17 +84,16 @@ namespace CRM.Web.Services
             return await PaginatedList<Activity>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
-        public async Task<Activity> GetActivityById(int? id)
+        public async Task<Activity> GetById(int? id)
         {
-            var activity = await _context.Activities
+            return await _context.Activities
                 .Include(a => a.Contact)
                 .Include(a => a.Salesman)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            return activity;
         }
 
-        public async Task<bool> CreateActivity(Activity activity)
+        public async Task<bool> Create(Activity activity)
         {
             activity.CreatedDate = DateTime.Now;
 
@@ -96,7 +104,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateActivity(Activity activity)
+        public async Task<bool> Update(Activity activity)
         {
             activity.UpdatedDate = DateTime.Now;
 
@@ -107,7 +115,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteActivity(int? id)
+        public async Task<bool> Delete(int? id)
         {
             var activity = await _context.Activities.FindAsync(id);
 
@@ -118,9 +126,10 @@ namespace CRM.Web.Services
             return deleteResult == 1;
         }
 
-        public async Task<bool> ActivityExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.Activities.AnyAsync(a => a.Id == id);
         }
+
     }
 }

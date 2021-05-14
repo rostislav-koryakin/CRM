@@ -19,7 +19,15 @@ namespace CRM.Web.Services
             _scoreRulesService = scoreRulesService;
         }
 
-        public async Task<PaginatedList<Company>> GetCompanies(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IEnumerable<Company>> GetAll()
+        {
+            return await _context.Companies
+                .Include(c => c.Contacts)
+                .Include(c => c.Deals)
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<Company>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             var appDbContext = _context.Companies.AsQueryable();
 
@@ -69,7 +77,7 @@ namespace CRM.Web.Services
             return await PaginatedList<Company>.CreateAsync(appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
-        public async Task<Company> GetCompanyById(int? id)
+        public async Task<Company> GetById(int? id)
         {
             return await _context.Companies
                 .Where(c => c.Id == id)
@@ -78,7 +86,7 @@ namespace CRM.Web.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> CreateCompany(Company company)
+        public async Task<bool> Create(Company company)
         {
             company.CreatedDate = DateTime.Now;
             company.Score = await _scoreRulesService.CalculateScoreRule(company);
@@ -90,7 +98,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateCompany(Company company)
+        public async Task<bool> Update(Company company)
         {
             company.UpdatedDate = DateTime.Now;
             company.Score = await _scoreRulesService.CalculateScoreRule(company);
@@ -102,7 +110,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteCompany(int? id)
+        public async Task<bool> Delete(int? id)
         {
             var company = await _context.Companies.FindAsync(id);
 
@@ -113,7 +121,7 @@ namespace CRM.Web.Services
             return deleteResult == 1;
         }
 
-        public async Task<bool> CompanyExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.Companies.AnyAsync(c => c.Id == id);
         }

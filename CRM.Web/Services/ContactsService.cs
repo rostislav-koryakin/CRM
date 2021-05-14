@@ -17,7 +17,15 @@ namespace CRM.Web.Services
             _context = context;
         }
 
-        public async Task<PaginatedList<Contact>> GetContacts(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IEnumerable<Contact>> GetAll()
+        {
+            return await _context.Contacts
+                .Include(c => c.Company)
+                .Include(c => c.Activities)
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedList<Contact>> GetPaginatedList(string sortOrder, string searchString, string currentFilter, int? pageNumber)
         {
             var appDbContext = _context.Contacts
                 .Include(c => c.Company)
@@ -70,7 +78,7 @@ namespace CRM.Web.Services
             return await PaginatedList<Contact>.CreateAsync((IQueryable<Contact>)appDbContext.AsNoTracking(), pageNumber ?? 1, pageSize);
         }
 
-        public async Task<Contact> GetContactById(int? id)
+        public async Task<Contact> GetById(int? id)
         {
             return await _context.Contacts
                 .Where(c => c.Id == id)
@@ -79,7 +87,7 @@ namespace CRM.Web.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> CreateContact(Contact contact)
+        public async Task<bool> Create(Contact contact)
         {
             contact.CreatedDate = DateTime.Now;
 
@@ -90,7 +98,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> UpdateContact(Contact contact)
+        public async Task<bool> Update(Contact contact)
         {
             contact.UpdatedDate = DateTime.Now;
 
@@ -101,7 +109,7 @@ namespace CRM.Web.Services
             return saveResult == 1;
         }
 
-        public async Task<bool> DeleteContact(int? id)
+        public async Task<bool> Delete(int? id)
         {
             var contact = await _context.Contacts.FindAsync(id);
 
@@ -112,7 +120,7 @@ namespace CRM.Web.Services
             return deleteResult == 1;
         }
 
-        public async Task<bool> ContactExists(int id)
+        public async Task<bool> Exists(int id)
         {
             return await _context.Contacts.AnyAsync(d => d.Id == id);
         }
