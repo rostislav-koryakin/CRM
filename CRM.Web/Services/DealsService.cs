@@ -175,6 +175,10 @@ namespace CRM.Web.Services
         {
             var deal = await GetById(id);
 
+            string totalDealAmount = deal.TotalAmount.ToString();
+            string date = System.DateTime.Today.Date.ToString("dd.MM.yyyy");
+            string validUntilDate = System.DateTime.Today.AddDays(14).Date.ToString("dd.MM.yyyy");
+
             var sb = new StringBuilder();
             sb.Append(@"
                         <html>
@@ -183,29 +187,35 @@ namespace CRM.Web.Services
                             <body>");
 
             sb.Append(@"  <div><h1>Sales Quote</h1></div>");
+            sb.AppendFormat(@"<div id='date'>
+                                    <p align='right'>
+                                        Date: {0}<br>
+                                       Valid Until: {1}<br>
+                                    </p>
+                                </div>", date, validUntilDate);
 
             sb.Append(@"  <div id='org'>
                                     <p align='left'>From: <br>
-                                        Company Name<br>
-                                        Address<br>
-                                        Zip Code<br>
+                                        Fejklowicz Company<br>
+                                        Warszawa Prosta 12<br>
+                                        01-203<br>
                                     </p>
                                 </div>");
 
             sb.AppendFormat(@"  <div id='customer'>
-                                    <p align='right'>Customer Details: <br>
+                                    <p align='left'>To: <br>
                                         {0}<br>
                                         {1}<br>
                                         {2}<br>
                                     </p>
                                 </div>", deal.Company.Name, deal.Company.Street, deal.Company.ZipCode);
             sb.Append(@"
-                                <div class='header'><h2>Quote items</h2></div>
                                     <table align='center'>
                                     <tr>
-                                        <th>Name</th>
+                                        <th>Product Name</th>
                                         <th>Quantity</th>
-                                        <th>Price</th>
+                                        <th>Net Price $</th>
+                                        <th>VAT</th>
                                     </tr>");
 
             foreach (var item in deal.DealsProducts)
@@ -214,13 +224,18 @@ namespace CRM.Web.Services
                                     <td>{0}</td>
                                     <td>{1}</td>
                                     <td>{2}</td>
-                                  </tr>", item.Product.Name, item.Quantity, item.Product.Price);
+                                    <td>{3}</td>
+                                  </tr>", item.Product.Name, item.Quantity, item.Product.Price, item.Product.VAT);
             }
             
             sb.Append(@"
                                 </table>
                             </body>
                         </html>");
+
+            sb.AppendFormat(@"<div>
+                                <h3 align='center'> Net Total $: {0} </h3>
+                            </div>", totalDealAmount);
 
             return sb.ToString();
         }

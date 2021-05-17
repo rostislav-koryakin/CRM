@@ -5,14 +5,14 @@
 }
 
 table {
-    width: 80%;
+    width: 95%;
     border-collapse: collapse;
 }
 
 td, th {
-    border: 1px solid gray;
+    border: 1px solid black;
     padding: 15px;
-    font-size: 22px;
+    font-size: 26px;
     text-align: center;
 }
 
@@ -28,7 +28,7 @@ h1 {
     padding-bottom: 40px;
 }
 
-#customer, #org{
+#customer, #org, #date{
     margin: 30px;
     font-size: 22px;
 }
