@@ -1,4 +1,4 @@
-﻿@model Company
+﻿@model FormCompanyViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,7 +12,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TaxpayerNumber" class="control-label">Tax Number</label>
+                <label asp-for="TaxpayerNumber" class="control-label"></label>
                 <input asp-for="TaxpayerNumber" class="form-control" />
                 <span asp-validation-for="TaxpayerNumber" class="text-danger"></span>
             </div>
@@ -27,13 +27,13 @@
                 <span asp-validation-for="Website" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NoOfEmployees" class="control-label">Number of Employees</label>
+                <label asp-for="NoOfEmployees" class="control-label"></label>
                 <input asp-for="NoOfEmployees" class="form-control" />
                 <span asp-validation-for="NoOfEmployees" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Industry" class="control-label"></label>
-                <select asp-for="Industry" class="form-control" asp-items="Html.GetEnumSelectList<Company.Industries>()">
+                <select asp-for="Industry" class="form-control" asp-items="Html.GetEnumSelectList<FormCompanyViewModel.Industries>()">
                     <option selected="selected" value="">---Please select---</option>
                 </select>
                 <span asp-validation-for="Industry" class="text-danger"></span>
@@ -54,7 +54,7 @@
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ZipCode" class="control-label">Zip Code</label>
+                <label asp-for="ZipCode" class="control-label"></label>
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
@@ -63,16 +63,7 @@
                 <input asp-for="Score" class="form-control" />
                 <span asp-validation-for="Score" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label">Created Date</label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedDate" class="control-label">Updated Date</label>
-                <input asp-for="UpdatedDate" class="form-control" />
-                <span asp-validation-for="UpdatedDate" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

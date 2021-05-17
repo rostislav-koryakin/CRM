@@ -1,4 +1,4 @@
-﻿@model Salesman
+﻿@model FormSalesmanViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -32,14 +32,9 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label">Created Date</label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedDate" class="control-label">Updated Date</label>
-                <input asp-for="UpdatedDate" class="form-control" />
-                <span asp-validation-for="UpdatedDate" class="text-danger"></span>
+                <label asp-for="MonthlySalesGoal" class="control-label"></label>
+                <input asp-for="MonthlySalesGoal" class="form-control" />
+                <span asp-validation-for="MonthlySalesGoal" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
