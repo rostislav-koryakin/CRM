@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using CRM.Web.Models.Entities;
 using CRM.Web.Data;
 using CRM.Web.Services;
+using CRM.Web.Models.ViewModels;
 
 namespace CRM.Web.Controllers
 {
@@ -42,7 +43,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var activities = await _activitiesService.GetActivities(sortOrder, searchString, currentFilter, pageNumber);
+            var activities = await _activitiesService.GetPaginatedList(sortOrder, searchString, currentFilter, pageNumber);
 
             return View(activities);
         }
@@ -52,14 +53,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var activity = await _activitiesService.GetActivityById(id);
+            var activity = await _activitiesService.GetById(id);
 
             if (activity == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(activity);
@@ -77,24 +78,35 @@ namespace CRM.Web.Controllers
         // POST: Activities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] Activity activity)
+        public async Task<IActionResult> Create([Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] FormActivityViewModel activityViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                return View();
             }
 
-            var successful = await _activitiesService.CreateActivity(activity);
+            Activity activity = new Activity
+            {
+                Name = activityViewModel.Name,
+                Description = activityViewModel.Description,
+                Type = (Activity.ActivityType)activityViewModel.Type,
+                StartDate = activityViewModel.StartDate,
+                EndDate = activityViewModel.EndDate,
+                ContactId = activityViewModel.ContactId,
+                SalesmanId = activityViewModel.SalesmanId
+            };
+
+            var successful = await _activitiesService.Create(activity);
 
             if (!successful)
             {
-                return BadRequest("Could not add Activity.");
+                return View("NotFound");
             }
 
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", activity.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", activity.SalesmanId);
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Activities/Edit/5
@@ -102,57 +114,82 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var activity = await _activitiesService.GetActivityById(id);
+            var activity = await _activitiesService.GetById(id);
 
             if (activity == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
             
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", activity.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", activity.SalesmanId);
-            
-            return View(activity);
+
+            FormActivityViewModel activityViewModel = new FormActivityViewModel 
+            {
+                Id = activity.Id,
+                Name = activity.Name,
+                Description = activity.Description,
+                Type = (FormActivityViewModel.ActivityType)activity.Type,
+                StartDate = activity.StartDate,
+                EndDate = activity.EndDate,
+                ContactId = activity.ContactId,
+                SalesmanId = activity.SalesmanId
+            };
+
+            return View(activityViewModel);
         }
 
         // POST: Activities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] Activity activity)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,StartDate,EndDate,Type,ContactId,SalesmanId,Id,CreatedDate,UpdatedDate")] FormActivityViewModel activityViewModel)
         {
-            if (id != activity.Id)
+            if (id != activityViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            Activity activity = new Activity
+            {
+                Id = activityViewModel.Id,
+                Name = activityViewModel.Name,
+                Description = activityViewModel.Description,
+                Type = (Activity.ActivityType)activityViewModel.Type,
+                StartDate = activityViewModel.StartDate,
+                EndDate = activityViewModel.EndDate,
+                ContactId = activityViewModel.ContactId,
+                SalesmanId = activityViewModel.SalesmanId
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _activitiesService.UpdateActivity(activity);
+                    var result = await _activitiesService.Update(activity);
 
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _activitiesService.ActivityExists(activity.Id)))
+                    if (!(await _activitiesService.Exists(activity.Id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", activity.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", activity.SalesmanId);
             
-            return View(activity);
+            return View(activityViewModel);
         }
 
         // GET: Activities/Delete/5
@@ -160,14 +197,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var activity = await _activitiesService.GetActivityById(id);
+            var activity = await _activitiesService.GetById(id);
 
             if (activity == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(activity);
@@ -180,14 +217,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _activitiesService.DeleteActivity(id);
+            var result = await _activitiesService.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));

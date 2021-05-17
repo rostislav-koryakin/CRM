@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -44,7 +42,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var contacts = await _contactsService.GetContacts(sortOrder, searchString, currentFilter, pageNumber);
+            var contacts = await _contactsService.GetPaginatedList(sortOrder, searchString, currentFilter, pageNumber);
 
             return View(contacts);
         }
@@ -54,17 +52,17 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var contact = await _contactsService.GetContactById(id);
+            var contact = await _contactsService.GetById(id);
 
             if (contact == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var contactViewModel = new ContactViewModel
+            var contactViewModel = new DetailsContactViewModel
             {
                 Activities = contact.Activities,
                 Company = contact.Company,
@@ -85,23 +83,35 @@ namespace CRM.Web.Controllers
         // POST: Contacts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] FormContactViewModel contactViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return View();
             }
 
-            var successful = await _contactsService.CreateContact(contact);
+            Contact contact = new Contact 
+            {
+                FirstName = contactViewModel.FirstName,
+                LastName = contactViewModel.LastName,
+                Position = contactViewModel.Position,
+                Description = contactViewModel.Description,
+                Source = (Contact.Sources)contactViewModel.Source,
+                Phone = contactViewModel.Phone,
+                Email = contactViewModel.Email,
+                CompanyId = contactViewModel.CompanyId
+            };
+
+            var successful = await _contactsService.Create(contact);
 
             if (!successful)
             {
-                return BadRequest("Could not add Contact.");
+                return View("NotFound");
             }
 
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", contact.CompanyId);
-            
-            return RedirectToAction("Index");
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Contacts/Edit/5
@@ -109,48 +119,74 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var contact = await _contactsService.GetContactById(id);
+            var contact = await _contactsService.GetById(id);
             
             if (contact == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", contact.CompanyId);
-            
-            return View(contact);
+
+            FormContactViewModel contactViewModel = new FormContactViewModel
+            {
+                Id = contact.Id,
+                FirstName = contact.FirstName,
+                LastName = contact.LastName,
+                Position = contact.Position,
+                Description = contact.Description,
+                Source = (FormContactViewModel.Sources)contact.Source,
+                Phone = contact.Phone,
+                Email = contact.Email,
+                CompanyId = contact.CompanyId
+            };
+
+            return View(contactViewModel);
         }
 
         // POST: Contacts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Position,Description,Source,Phone,Email,CompanyId,Id,CreatedDate,UpdatedDate")] FormContactViewModel contactViewModel)
         {
-            if (id != contact.Id)
+            if (id != contactViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            Contact contact = new Contact
+            {
+                Id = contactViewModel.Id,
+                FirstName = contactViewModel.FirstName,
+                LastName = contactViewModel.LastName,
+                Position = contactViewModel.Position,
+                Description = contactViewModel.Description,
+                Source = (Contact.Sources)contactViewModel.Source,
+                Phone = contactViewModel.Phone,
+                Email = contactViewModel.Email,
+                CompanyId = contactViewModel.CompanyId
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _contactsService.UpdateContact(contact);
+                    var result = await _contactsService.Update(contact);
 
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _contactsService.ContactExists(contact.Id)))
+                    if (!(await _contactsService.Exists(contact.Id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -158,7 +194,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", contact.CompanyId);
             
-            return View(contact);
+            return View(contactViewModel);
         }
 
         // GET: Contacts/Delete/5
@@ -166,14 +202,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var contact = await _contactsService.GetContactById(id);
+            var contact = await _contactsService.GetById(id);
 
             if (contact == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(contact);
@@ -186,14 +222,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _contactsService.DeleteContact(id);
+            var result = await _contactsService.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));

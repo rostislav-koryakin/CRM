@@ -40,7 +40,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var salesmen = await _salesmanServiece.GetSalesmen(sortOrder, searchString, currentFilter, pageNumber);
+            var salesmen = await _salesmanServiece.GetPaginatedList(sortOrder, searchString, currentFilter, pageNumber);
 
             return View(salesmen);
         }
@@ -50,17 +50,17 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var salesman = await _salesmanServiece.GetSalesmanlById(id);
+            var salesman = await _salesmanServiece.GetById(id);
 
             if (salesman == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var salesmanViewModel = new SalesmanViewModel
+            var salesmanViewModel = new DetailsSalesmanViewModel
             {
                 Salesman = salesman,
                 Activities = salesman.Activities,
@@ -77,25 +77,32 @@ namespace CRM.Web.Controllers
         }
 
         // POST: Salesmen/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Phone,Email,Id,CreatedDate,UpdatedDate")] Salesman salesman)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Phone,Email,MonthlySalesGoal,Id,CreatedDate,UpdatedDate")] FormSalesmanViewModel salesmanViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return View();
             }
 
-            var successful = await _salesmanServiece.CreateSalesman(salesman);
+            Salesman salesman = new Salesman 
+            {
+                FirstName = salesmanViewModel.FirstName,
+                LastName = salesmanViewModel.LastName,
+                Phone = salesmanViewModel.Phone,
+                Email = salesmanViewModel.Email,
+                MonthlySalesGoal = salesmanViewModel.MonthlySalesGoal
+            };
+
+            var successful = await _salesmanServiece.Create(salesman);
 
             if (!successful)
             {
-                return BadRequest("Could not add Salesman.");
+                return View("NotFound");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Salesmen/Edit/5
@@ -103,52 +110,72 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var salesman = await _salesmanServiece.GetSalesmanlById(id);
+            var salesman = await _salesmanServiece.GetById(id);
 
             if (salesman == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            return View(salesman);
+            FormSalesmanViewModel salesmanViewModel = new FormSalesmanViewModel
+            {
+                Id = salesman.Id,
+                FirstName = salesman.FirstName,
+                LastName = salesman.LastName,
+                Phone = salesman.Phone,
+                Email = salesman.Email,
+                MonthlySalesGoal = salesman.MonthlySalesGoal
+            };
+
+            return View(salesmanViewModel);
         }
 
         // POST: Salesmen/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Phone,Email,Id,CreatedDate,UpdatedDate")] Salesman salesman)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Phone,Email,MonthlySalesGoal,Id,CreatedDate,UpdatedDate")] FormSalesmanViewModel salesmanViewModel)
         {
-            if (id != salesman.Id)
+            if (id != salesmanViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            Salesman salesman = new Salesman
+            {
+                Id = salesmanViewModel.Id,
+                FirstName = salesmanViewModel.FirstName,
+                LastName = salesmanViewModel.LastName,
+                Phone = salesmanViewModel.Phone,
+                Email = salesmanViewModel.Email,
+                MonthlySalesGoal = salesmanViewModel.MonthlySalesGoal
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _salesmanServiece.UpdateSalesman(salesman);
+                    var result = await _salesmanServiece.Update(salesman);
 
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _salesmanServiece.SalesmanExists(salesman.Id)))
+                    if (!(await _salesmanServiece.Exists(salesman.Id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(salesman);
+
+            return View(salesmanViewModel);
         }
 
         // GET: Salesmen/Delete/5
@@ -156,14 +183,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var salesman = await _salesmanServiece.GetSalesmanlById(id);
+            var salesman = await _salesmanServiece.GetById(id);
 
             if (salesman == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(salesman);
@@ -176,14 +203,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _salesmanServiece.DeleteSalesman(id);
+            var result = await _salesmanServiece.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));

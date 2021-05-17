@@ -44,7 +44,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var deals = await _dealsService.GetDeals(sortOrder, searchString, currentFilter, pageNumber);
+            var deals = await _dealsService.GetPaginatedList(sortOrder, searchString, currentFilter, pageNumber);
 
             return View(deals);
         }
@@ -54,14 +54,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var deal = await _dealsService.GetDealById(id);
+            var deal = await _dealsService.GetById(id);
 
             if (deal == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             List<DealProduct> dealProducts = new List<DealProduct>();
@@ -74,7 +74,7 @@ namespace CRM.Web.Controllers
                 products.Add(dealProduct.Product);
             }
 
-            var model = new DealViewModel
+            DetailsDealViewModel dealViewModel = new DetailsDealViewModel
             {
                 Deal = deal,
                 Company = deal.Company,
@@ -84,7 +84,7 @@ namespace CRM.Web.Controllers
                 Products = products
             };
 
-            return View(model);
+            return View(dealViewModel);
         }
 
         // GET: Deals/Create
@@ -100,25 +100,36 @@ namespace CRM.Web.Controllers
         // POST: Deals/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,TotalAmount,Stage,Description,ClosingDate,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] Deal deal)
+        public async Task<IActionResult> Create([Bind("Name,TotalAmount,Stage,Description,ClosingDate,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] FormDealViewModel dealViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return View("NotFound");
             }
 
-            var successful = await _dealsService.CreateDeal(deal);
+            Deal deal = new Deal 
+            {
+                Name = dealViewModel.Name,
+                Stage = (Deal.DealStage)dealViewModel.Stage,
+                Description = dealViewModel.Description,
+                ClosingDate = dealViewModel.ClosingDate,
+                ContactId = dealViewModel.ContactId,
+                CompanyId = dealViewModel.CompanyId,
+                SalesmanId = dealViewModel.SalesmanId
+            };
+
+            var successful = await _dealsService.Create(deal);
 
             if (!successful)
             {
-                return BadRequest("Could not add Deal.");
+                return View("NotFound");
             }
 
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", deal.CompanyId);
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", deal.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", deal.SalesmanId);
             
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Deals/Edit/5
@@ -126,49 +137,73 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var deal = await _dealsService.GetDealById(id);
+            var deal = await _dealsService.GetById(id);
 
             if (deal == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
             
             ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", deal.CompanyId);
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", deal.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", deal.SalesmanId);
-            
-            return View(deal);
+
+            FormDealViewModel dealViewModel = new FormDealViewModel
+            {
+                Id = deal.Id,
+                Name = deal.Name,
+                Stage = (FormDealViewModel.DealStage)deal.Stage,
+                Description = deal.Description,
+                ClosingDate = deal.ClosingDate,
+                ContactId = deal.ContactId,
+                CompanyId = deal.CompanyId,
+                SalesmanId = deal.SalesmanId
+            };
+
+            return View(dealViewModel);
         }
 
         // POST: Deals/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,TotalAmount,Stage,Description,ClosingDate,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] Deal deal)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,TotalAmount,Stage,Description,ClosingDate,ContactId,CompanyId,SalesmanId,Id,CreatedDate,UpdatedDate")] FormDealViewModel dealViewModel)
         {
-            if (id != deal.Id)
+            if (id != dealViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            Deal deal = new Deal
+            {
+                Id = dealViewModel.Id,
+                Name = dealViewModel.Name,
+                Stage = (Deal.DealStage)dealViewModel.Stage,
+                Description = dealViewModel.Description,
+                ClosingDate = dealViewModel.ClosingDate,
+                ContactId = dealViewModel.ContactId,
+                CompanyId = dealViewModel.CompanyId,
+                SalesmanId = dealViewModel.SalesmanId
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _dealsService.UpdateDeal(deal);
+                    var result = await _dealsService.Update(deal);
                     
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _dealsService.DealExists(deal.Id)))
+                    if (!(await _dealsService.Exists(deal.Id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -178,7 +213,7 @@ namespace CRM.Web.Controllers
             ViewData["ContactId"] = new SelectList(_context.Contacts, "Id", "Email", deal.ContactId);
             ViewData["SalesmanId"] = new SelectList(_context.Salesmen, "Id", "Email", deal.SalesmanId);
             
-            return View(deal);
+            return View(dealViewModel);
         }
 
         // GET: Deals/Delete/5
@@ -186,14 +221,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var deal = await _dealsService.GetDealById(id);
+            var deal = await _dealsService.GetById(id);
 
             if (deal == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(deal);
@@ -206,14 +241,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _dealsService.DeleteDeal(id);
+            var result = await _dealsService.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));

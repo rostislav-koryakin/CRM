@@ -41,7 +41,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var companies = await _compmaniesServices.GetCompanies(sortOrder, searchString, currentFilter, pageNumber);
+            var companies = await _compmaniesServices.GetPaginatedList(sortOrder, searchString, currentFilter, pageNumber);
 
             return View(companies);
         }
@@ -51,17 +51,17 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var company = await _compmaniesServices.GetCompanyById(id);
+            var company = await _compmaniesServices.GetById(id);
 
             if (company == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var companyViewModel = new CompanyViewModel
+            var companyViewModel = new DetailsCompanyViewModel
             {
                 Company = company,
                 Contacts = company.Contacts,
@@ -80,21 +80,34 @@ namespace CRM.Web.Controllers
         // POST: Companies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] Company company)
+        public async Task<IActionResult> Create([Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] FormCompanyViewModel companyViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return View();
             }
 
-            var successful = await _compmaniesServices.CreateCompany(company);
+            Company company = new Company
+            { 
+                TaxpayerNumber = companyViewModel.TaxpayerNumber,
+                Name = companyViewModel.Name,
+                Website = companyViewModel.Website,
+                NoOfEmployees = companyViewModel.NoOfEmployees,
+                Industry = (Company.Industries)companyViewModel.Industry,
+                Country = companyViewModel.Country,
+                City = companyViewModel.City,
+                Street = companyViewModel.Street,
+                ZipCode = companyViewModel.ZipCode
+            };
+
+            var successful = await _compmaniesServices.Create(company);
 
             if (!successful)
             {
-                return BadRequest("Could not add Company.");
+                return View("NotFound");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Companies/Edit/5
@@ -102,50 +115,82 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var company = await _compmaniesServices.GetCompanyById(id);
+            var company = await _compmaniesServices.GetById(id);
             
             if (company == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
-            
-            return View(company);
+
+            FormCompanyViewModel companyViewModel = new FormCompanyViewModel
+            {
+                Id = company.Id,
+                TaxpayerNumber = company.TaxpayerNumber,
+                Name = company.Name,
+                Website = company.Website,
+                NoOfEmployees = company.NoOfEmployees,
+                Industry = (FormCompanyViewModel.Industries)company.Industry,
+                Country = company.Country,
+                City = company.City,
+                Street = company.Street,
+                ZipCode = company.ZipCode,
+                Score = company.Score
+            };
+
+            return View(companyViewModel);
         }
 
         // POST: Companies/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] Company company)
+        public async Task<IActionResult> Edit(int id, [Bind("TaxpayerNumber,Name,Website,NoOfEmployees,Industry,Country,City,Street,ZipCode,Id,CreatedDate,UpdatedDate,Score")] FormCompanyViewModel companyViewModel)
         {
-            if (id != company.Id)
+            if (id != companyViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            Company company = new Company
+            {
+                Id = companyViewModel.Id,
+                TaxpayerNumber = companyViewModel.TaxpayerNumber,
+                Name = companyViewModel.Name,
+                Website = companyViewModel.Website,
+                NoOfEmployees = companyViewModel.NoOfEmployees,
+                Industry = (Company.Industries)companyViewModel.Industry,
+                Country = companyViewModel.Country,
+                City = companyViewModel.City,
+                Street = companyViewModel.Street,
+                ZipCode = companyViewModel.ZipCode,
+                Score = companyViewModel.Score
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _compmaniesServices.UpdateCompany(company);
+                    var result = await _compmaniesServices.Update(company);
 
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _compmaniesServices.CompanyExists(company.Id)))
+                    if (!(await _compmaniesServices.Exists(company.Id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(company);
+
+            return View(companyViewModel);
         }
 
         // GET: Companies/Delete/5
@@ -153,14 +198,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var company = await _compmaniesServices.GetCompanyById(id);
+            var company = await _compmaniesServices.GetById(id);
 
             if (company == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(company);
@@ -173,14 +218,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _compmaniesServices.DeleteCompany(id);
+            var result = await _compmaniesServices.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));

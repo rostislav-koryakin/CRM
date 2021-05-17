@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Web.Models.Entities;
 using CRM.Web.Services;
+using CRM.Web.Models.ViewModels;
 
 namespace CRM.Web.Controllers
 {
@@ -18,7 +19,7 @@ namespace CRM.Web.Controllers
         // GET: ScoreRules
         public async Task<IActionResult> Index()
         {
-            var rules = await _scoreRulesService.GetRules();
+            var rules = await _scoreRulesService.GetAll();
 
             return View(rules);
         }
@@ -28,14 +29,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var rules = await _scoreRulesService.GetRuleById(id);
+            var rules = await _scoreRulesService.GetById(id);
 
             if (rules == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(rules);
@@ -50,21 +51,29 @@ namespace CRM.Web.Controllers
         // POST: ScoreRules/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Criteria,RelationSymbol,Value,Points,Id,CreatedDate,UpdatedDate")] ScoreRule rule)
+        public async Task<IActionResult> Create([Bind("Criteria,RelationSymbol,Value,Points,Id,CreatedDate,UpdatedDate")] FormScoreRuleViewModel scoreRuleViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return View();
             }
 
-            var successful = await _scoreRulesService.CreateRule(rule);
+            ScoreRule rule = new ScoreRule 
+            {
+                Criteria = (ScoreRule.RuleCriteria)scoreRuleViewModel.Criteria,
+                RelationSymbol = (ScoreRule.ScoreRelationSymbol)scoreRuleViewModel.RelationSymbol,
+                Value = scoreRuleViewModel.Value,
+                Points = scoreRuleViewModel.Points
+            };
+
+            var successful = await _scoreRulesService.Create(rule);
 
             if (!successful)
             {
-                return BadRequest("Could not add Rule.");
+                return View("NotFound");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ScoreRules/Edit/5
@@ -72,50 +81,68 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var rule = await _scoreRulesService.GetRuleById(id);
+            var rule = await _scoreRulesService.GetById(id);
 
             if (rule == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            return View(rule);
+            FormScoreRuleViewModel scoreRuleViewModel = new FormScoreRuleViewModel
+            {
+                Id = rule.Id,
+                Criteria = (FormScoreRuleViewModel.RuleCriteria)rule.Criteria,
+                RelationSymbol = (FormScoreRuleViewModel.ScoreRelationSymbol)rule.RelationSymbol,
+                Value = rule.Value,
+                Points = rule.Points
+            };
+
+            return View(scoreRuleViewModel);
         }
 
         // POST: ScoreRules/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Criteria,RelationSymbol,Value,Points,Id,CreatedDate,UpdatedDate")] ScoreRule rule)
+        public async Task<IActionResult> Edit(int id, [Bind("Criteria,RelationSymbol,Value,Points,Id,CreatedDate,UpdatedDate")] FormScoreRuleViewModel scoreRuleViewModel)
         {
-            if (id != rule.Id)
+            if (id != scoreRuleViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            ScoreRule rule = new ScoreRule
+            {
+                Id = scoreRuleViewModel.Id,
+                Criteria = (ScoreRule.RuleCriteria)scoreRuleViewModel.Criteria,
+                RelationSymbol = (ScoreRule.ScoreRelationSymbol)scoreRuleViewModel.RelationSymbol,
+                Value = scoreRuleViewModel.Value,
+                Points = scoreRuleViewModel.Points
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _scoreRulesService.UpdateRule(rule);
+                    var result = await _scoreRulesService.Update(rule);
 
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _scoreRulesService.RuleExists(id)))
+                    if (!(await _scoreRulesService.Exists(id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(rule);
+            return View(scoreRuleViewModel);
         }
 
         // GET: ScoreRules/Delete/5
@@ -123,14 +150,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var rule = await _scoreRulesService.GetRuleById(id);
+            var rule = await _scoreRulesService.GetById(id);
 
             if (rule == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(rule);
@@ -143,14 +170,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _scoreRulesService.DeleteRule(id);
+            var result = await _scoreRulesService.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));
@@ -161,7 +188,7 @@ namespace CRM.Web.Controllers
         {
             await _scoreRulesService.ApplyScoreRulesForAllCompanies();
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace CRM.Web.Controllers
         // GET: DealProducts
         public async Task<IActionResult> Index()
         {
-            var dealsItems = await _dealsProductsServices.GetDealsItems();
+            var dealsItems = await _dealsProductsServices.GetAll();
             
             return View(dealsItems);
         }
@@ -36,7 +36,7 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var dealProduct = await _dealsProductsServices.GetDealItemById(id);
+            var dealProduct = await _dealsProductsServices.GetById(id);
             
             if (dealProduct == null)
             {
@@ -65,7 +65,7 @@ namespace CRM.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            var successful = await _dealsProductsServices.CreateDealItem(dealProduct);
+            var successful = await _dealsProductsServices.Create(dealProduct);
 
             if (!successful)
             {
@@ -86,7 +86,7 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var dealProduct = await _dealsProductsServices.GetDealItemById(id);
+            var dealProduct = await _dealsProductsServices.GetById(id);
             
             if (dealProduct == null)
             {
@@ -113,7 +113,7 @@ namespace CRM.Web.Controllers
             {
                 try
                 {
-                    var result = await _dealsProductsServices.UpdateDealItem(dealProduct);
+                    var result = await _dealsProductsServices.Update(dealProduct);
 
                     if (result == false)
                     {
@@ -122,7 +122,7 @@ namespace CRM.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _dealsProductsServices.DealItemExists(dealProduct.Id)))
+                    if (!(await _dealsProductsServices.Exists(dealProduct.Id)))
                     {
                         return NotFound();
                     }
@@ -144,7 +144,7 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var dealProduct = await _dealsProductsServices.GetDealItemById(id);
+            var dealProduct = await _dealsProductsServices.GetById(id);
 
             if (dealProduct == null)
             {
@@ -164,7 +164,7 @@ namespace CRM.Web.Controllers
                 return NotFound();
             }
 
-            var result = await _dealsProductsServices.DeleteDealItem(id);
+            var result = await _dealsProductsServices.Delete(id);
 
             if (result == false)
             {

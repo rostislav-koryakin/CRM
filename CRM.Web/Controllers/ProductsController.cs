@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CRM.Web.Models.Entities;
 using CRM.Web.Data;
 using CRM.Web.Services;
+using CRM.Web.Models.ViewModels;
 
 namespace CRM.Web.Controllers
 {
@@ -38,7 +38,7 @@ namespace CRM.Web.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var products = await _productsService.GetProducts(sortOrder, searchString, currentFilter, pageNumber);
+            var products = await _productsService.GetPaginatedList(sortOrder, searchString, currentFilter, pageNumber);
 
             return View(products);
         }
@@ -48,14 +48,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var product = await _productsService.GetProductById(id);
+            var product = await _productsService.GetById(id);
             
             if (product == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(product);
@@ -70,21 +70,29 @@ namespace CRM.Web.Controllers
         // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Price,Id,CreatedDate,UpdatedDate")] Product product)
+        public async Task<IActionResult> Create([Bind("Name,Price,Id,VAT,Description,CreatedDate,UpdatedDate")] FormProductViewModel productViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return View();
             }
 
-            var successful = await _productsService.CreateProduct(product);
+            Product product = new Product 
+            {
+                Name = productViewModel.Name,
+                Price = productViewModel.Price,
+                VAT = productViewModel.VAT,
+                Description = productViewModel.Description
+            };
+
+            var successful = await _productsService.Create(product);
 
             if (!successful)
             {
-                return BadRequest("Could not add Product.");
+                return View("NotFound");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Edit/5
@@ -92,50 +100,70 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var product = await _productsService.GetProductById(id);
+            var product = await _productsService.GetById(id);
 
             if (product == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            return View(product);
+            FormProductViewModel productViewModel = new FormProductViewModel 
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                VAT = product.VAT,
+                Description = product.Description
+            };
+
+            return View(productViewModel);
         }
 
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Price,Id,CreatedDate,UpdatedDate")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Price,VAT,Description,Id,CreatedDate,UpdatedDate")] FormProductViewModel productViewModel)
         {
-            if (id != product.Id)
+            if (id != productViewModel.Id)
             {
-                return NotFound();
+                return View("NotFound");
             }
+
+            Product product = new Product
+            {
+                Id = productViewModel.Id,
+                Name = productViewModel.Name,
+                Price = productViewModel.Price,
+                VAT = productViewModel.VAT,
+                Description = productViewModel.Description
+            };
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var result = await _productsService.UpdateProduct(product);
+                    var result = await _productsService.Update(product);
 
                     if (result == false)
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!(await _productsService.ProductExists(id)))
+                    if (!(await _productsService.Exists(id)))
                     {
-                        return NotFound();
+                        return View("NotFound");
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+
+            return View(productViewModel);
         }
 
         // GET: Products/Delete/5
@@ -143,14 +171,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var product = await _productsService.GetProductById(id);
+            var product = await _productsService.GetById(id);
 
             if (product == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(product);
@@ -163,14 +191,14 @@ namespace CRM.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
-            var result = await _productsService.DeleteProduct(id);
+            var result = await _productsService.Delete(id);
 
             if (result == false)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return RedirectToAction(nameof(Index));
