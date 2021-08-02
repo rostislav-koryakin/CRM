@@ -205,10 +205,10 @@ namespace CRM.Web.Services
             sb.AppendFormat(@"  <div id='customer'>
                                     <p align='left'>To: <br>
                                         {0}<br>
-                                        {1}<br>
-                                        {2}<br>
+                                        {1}, {2}<br>
+                                        {3}<br>
                                     </p>
-                                </div>", deal.Company.Name, deal.Company.Street, deal.Company.ZipCode);
+                                </div>", deal.Company.Name, deal.Company.City, deal.Company.Street, deal.Company.ZipCode);
             sb.Append(@"
                                     <table align='center'>
                                     <tr>
