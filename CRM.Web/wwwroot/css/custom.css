@@ -54,7 +54,7 @@ dd>a {
 
 .button-panel {
     display: grid;
-    grid-template-columns: 10fr 1fr 1fr 1fr;
+    grid-template-columns: 10fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     justify-items: start;
 }
