@@ -97,7 +97,9 @@ namespace CRM.Web.Controllers
                 Criteria = (FormScoreRuleViewModel.RuleCriteria)rule.Criteria,
                 RelationSymbol = (FormScoreRuleViewModel.ScoreRelationSymbol)rule.RelationSymbol,
                 Value = rule.Value,
-                Points = rule.Points
+                Points = rule.Points,
+                CreatedDate = rule.CreatedDate,
+                UpdatedDate = rule.UpdatedDate
             };
 
             return View(scoreRuleViewModel);
@@ -119,7 +121,9 @@ namespace CRM.Web.Controllers
                 Criteria = (ScoreRule.RuleCriteria)scoreRuleViewModel.Criteria,
                 RelationSymbol = (ScoreRule.ScoreRelationSymbol)scoreRuleViewModel.RelationSymbol,
                 Value = scoreRuleViewModel.Value,
-                Points = scoreRuleViewModel.Points
+                Points = scoreRuleViewModel.Points,
+                CreatedDate = scoreRuleViewModel.CreatedDate,
+                UpdatedDate = scoreRuleViewModel.UpdatedDate
             };
 
             if (ModelState.IsValid)

@@ -136,7 +136,9 @@ namespace CRM.Web.Controllers
                 StartDate = activity.StartDate,
                 EndDate = activity.EndDate,
                 ContactId = activity.ContactId,
-                SalesmanId = activity.SalesmanId
+                SalesmanId = activity.SalesmanId,
+                CreatedDate = activity.CreatedDate,
+                UpdatedDate = activity.UpdatedDate
             };
 
             return View(activityViewModel);
@@ -161,7 +163,9 @@ namespace CRM.Web.Controllers
                 StartDate = activityViewModel.StartDate,
                 EndDate = activityViewModel.EndDate,
                 ContactId = activityViewModel.ContactId,
-                SalesmanId = activityViewModel.SalesmanId
+                SalesmanId = activityViewModel.SalesmanId,
+                CreatedDate = activityViewModel.CreatedDate,
+                UpdatedDate = activityViewModel.UpdatedDate
             };
 
             if (ModelState.IsValid)

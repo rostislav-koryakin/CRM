@@ -116,7 +116,9 @@ namespace CRM.Web.Controllers
                 Name = product.Name,
                 Price = product.Price,
                 VAT = product.VAT,
-                Description = product.Description
+                Description = product.Description,
+                CreatedDate = product.CreatedDate,
+                UpdatedDate = product.UpdatedDate
             };
 
             return View(productViewModel);
@@ -138,7 +140,9 @@ namespace CRM.Web.Controllers
                 Name = productViewModel.Name,
                 Price = productViewModel.Price,
                 VAT = productViewModel.VAT,
-                Description = productViewModel.Description
+                Description = productViewModel.Description,
+                CreatedDate = productViewModel.CreatedDate,
+                UpdatedDate = productViewModel.UpdatedDate
             };
 
             if (ModelState.IsValid)

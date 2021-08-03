@@ -7,6 +7,10 @@ namespace CRM.Web.Models.ViewModels
     {
         public int Id { get; set; }
 
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
+
         public enum RuleCriteria
         {
             Industry,

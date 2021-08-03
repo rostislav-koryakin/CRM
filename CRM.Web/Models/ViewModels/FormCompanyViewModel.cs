@@ -7,6 +7,10 @@ namespace CRM.Web.Models.ViewModels
     {
         public int Id { get; set; }
 
+        public DateTime? CreatedDate { get; set; }
+
+        public DateTime? UpdatedDate { get; set; }
+
         [Required]
         [StringLength(15, MinimumLength = 4)]
         [Display(Name = "Tax Number")]

@@ -141,7 +141,9 @@ namespace CRM.Web.Controllers
                 Source = (FormContactViewModel.Sources)contact.Source,
                 Phone = contact.Phone,
                 Email = contact.Email,
-                CompanyId = contact.CompanyId
+                CompanyId = contact.CompanyId,
+                CreatedDate = contact.CreatedDate,
+                UpdatedDate = contact.UpdatedDate
             };
 
             return View(contactViewModel);
@@ -167,7 +169,9 @@ namespace CRM.Web.Controllers
                 Source = (Contact.Sources)contactViewModel.Source,
                 Phone = contactViewModel.Phone,
                 Email = contactViewModel.Email,
-                CompanyId = contactViewModel.CompanyId
+                CompanyId = contactViewModel.CompanyId,
+                CreatedDate = contactViewModel.CreatedDate,
+                UpdatedDate = contactViewModel.UpdatedDate
             };
 
             if (ModelState.IsValid)

@@ -137,7 +137,9 @@ namespace CRM.Web.Controllers
                 City = company.City,
                 Street = company.Street,
                 ZipCode = company.ZipCode,
-                Score = company.Score
+                Score = company.Score,
+                CreatedDate = company.CreatedDate,
+                UpdatedDate = company.UpdatedDate
             };
 
             return View(companyViewModel);
@@ -165,6 +167,8 @@ namespace CRM.Web.Controllers
                 City = companyViewModel.City,
                 Street = companyViewModel.Street,
                 ZipCode = companyViewModel.ZipCode,
+                CreatedDate = companyViewModel.CreatedDate,
+                UpdatedDate = companyViewModel.UpdatedDate,
                 Score = companyViewModel.Score
             };
 

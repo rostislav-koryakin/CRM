@@ -110,6 +110,7 @@ namespace CRM.Web.Controllers
             Deal deal = new Deal 
             {
                 Name = dealViewModel.Name,
+                TotalAmount = dealViewModel.TotalAmount,
                 Stage = (Deal.DealStage)dealViewModel.Stage,
                 Description = dealViewModel.Description,
                 ClosingDate = dealViewModel.ClosingDate,
@@ -155,12 +156,15 @@ namespace CRM.Web.Controllers
             {
                 Id = deal.Id,
                 Name = deal.Name,
+                TotalAmount = deal.TotalAmount,
                 Stage = (FormDealViewModel.DealStage)deal.Stage,
                 Description = deal.Description,
                 ClosingDate = deal.ClosingDate,
                 ContactId = deal.ContactId,
                 CompanyId = deal.CompanyId,
-                SalesmanId = deal.SalesmanId
+                SalesmanId = deal.SalesmanId,
+                CreatedDate = deal.CreatedDate,
+                UpdatedDate = deal.UpdatedDate
             };
 
             return View(dealViewModel);
@@ -180,12 +184,15 @@ namespace CRM.Web.Controllers
             {
                 Id = dealViewModel.Id,
                 Name = dealViewModel.Name,
+                TotalAmount = dealViewModel.TotalAmount,
                 Stage = (Deal.DealStage)dealViewModel.Stage,
                 Description = dealViewModel.Description,
                 ClosingDate = dealViewModel.ClosingDate,
                 ContactId = dealViewModel.ContactId,
                 CompanyId = dealViewModel.CompanyId,
-                SalesmanId = dealViewModel.SalesmanId
+                SalesmanId = dealViewModel.SalesmanId,
+                CreatedDate = dealViewModel.CreatedDate,
+                UpdatedDate = dealViewModel.UpdatedDate
             };
 
             if (ModelState.IsValid)

@@ -127,7 +127,9 @@ namespace CRM.Web.Controllers
                 LastName = salesman.LastName,
                 Phone = salesman.Phone,
                 Email = salesman.Email,
-                MonthlySalesGoal = salesman.MonthlySalesGoal
+                MonthlySalesGoal = salesman.MonthlySalesGoal,
+                CreatedDate = salesman.CreatedDate,
+                UpdatedDate = salesman.UpdatedDate
             };
 
             return View(salesmanViewModel);
@@ -150,7 +152,9 @@ namespace CRM.Web.Controllers
                 LastName = salesmanViewModel.LastName,
                 Phone = salesmanViewModel.Phone,
                 Email = salesmanViewModel.Email,
-                MonthlySalesGoal = salesmanViewModel.MonthlySalesGoal
+                MonthlySalesGoal = salesmanViewModel.MonthlySalesGoal,
+                CreatedDate = salesmanViewModel.CreatedDate,
+                UpdatedDate = salesmanViewModel.UpdatedDate
             };
 
             if (ModelState.IsValid)
