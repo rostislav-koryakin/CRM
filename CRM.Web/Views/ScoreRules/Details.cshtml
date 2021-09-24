@@ -8,49 +8,49 @@
 <div>
     <div class="button-panel">
         <p>
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Редактировать</a>
         </p>
         <p>
-            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Создать</a>
         </p>
         <p>
-            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Delete</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Удалить</a>
         </p>
     </div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            Criteria
+            Критерий
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Criteria)
         </dd>
         <dt class="col-sm-2">
-            Relation Symbol
+            Отношение
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RelationSymbol)
         </dd>
         <dt class="col-sm-2">
-            Value
+            Ценность
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Value)
         </dd>
         <dt class="col-sm-2">
-            Points
+            Количество пунктов
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Points)
         </dd>
         <dt class="col-sm-2">
-            Created Date
+            Дата регистрации
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedDate)
         </dd>
         <dt class="col-sm-2">
-            Updated Date
+            Дата обновления
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedDate)

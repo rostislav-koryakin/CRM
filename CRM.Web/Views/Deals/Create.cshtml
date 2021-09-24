@@ -5,54 +5,54 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Create new Deal</h4>
+<h4>Создать новую сделку</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Stage" class="control-label"></label>
+                <label asp-for="Stage" class="control-label">Стадия</label>
                 <select asp-for="Stage" class="form-control" asp-items="Html.GetEnumSelectList<FormDealViewModel.DealStage>()">
-                    <option selected="selected" value="">--Please select---</option>
+                    <option selected="selected" value="">---Выберите, пожалуйста---</option>
                 </select>
                 <span asp-validation-for="Stage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                <label asp-for="Description" class="control-label">Описание</label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ContactId" class="control-label"></label>
+                <label asp-for="ContactId" class="control-label">Контакт</label>
                 <select asp-for="ContactId" class="form-control" asp-items="ViewBag.ContactId">
                     <option selected="selected" value="">--Please select---</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="CompanyId" class="control-label"></label>
+                <label asp-for="CompanyId" class="control-label">Компания</label>
                 <select asp-for="CompanyId" class="form-control" asp-items="ViewBag.CompanyId">
                     <option selected="selected" value="">--Please select---</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="SalesmanId" class="control-label"></label>
+                <label asp-for="SalesmanId" class="control-label">Продавец</label>
                 <select asp-for="SalesmanId" class="form-control" asp-items="ViewBag.SalesmanId">
                     <option selected="selected" value="">--Please select---</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="ClosingDate" class="control-label"></label>
+                <label asp-for="ClosingDate" class="control-label">Дата совершения</label>
                 <input asp-for="ClosingDate" class="form-control" />
                 <span asp-validation-for="ClosingDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>

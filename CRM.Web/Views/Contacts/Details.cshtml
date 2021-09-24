@@ -9,31 +9,31 @@
     <div class="button-panel">
         <h3>@Html.DisplayFor(model => model.Contact.FirstName) @Html.DisplayFor(model => model.Contact.LastName)</h3>
         <p>
-            <a asp-action="Edit" asp-route-id="@Model.Contact.Id" class="btn btn-primary btn-sm">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Contact.Id" class="btn btn-primary btn-sm">Редактировать</a>
         </p>
         <p>
-            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Создать</a>
         </p>
         <p>
-            <a asp-action="Delete" asp-route-id="@Model.Contact.Id" class="btn btn-primary btn-sm">Delete</a>
+            <a asp-action="Delete" asp-route-id="@Model.Contact.Id" class="btn btn-primary btn-sm">Удалить</a>
         </p>
     </div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            First Name
+            Имя
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.FirstName)
         </dd>
         <dt class="col-sm-2">
-            Last Name
+            Фамилия
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.LastName)
         </dd>
         <dt class="col-sm-2">
-            Phone
+            Номер мобильного телефона
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.Phone)
@@ -45,13 +45,13 @@
             @Html.DisplayFor(model => model.Contact.Email)
         </dd>
         <dt class="col-sm-2">
-            Source
+            Источник
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.Source)
         </dd>
         <dt class="col-sm-2">
-            Company
+            Компания
         </dt>
         <dd class="col-sm-10">
             <a asp-controller="Companies" asp-action="Details" asp-route-id="@Model.Company.Id">
@@ -59,25 +59,25 @@
             </a>
         </dd>
         <dt class="col-sm-2">
-            Position
+            Позиция
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.Position)
         </dd>
         <dt class="col-sm-2">
-            Description
+            Описание
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.Description)
         </dd>
         <dt class="col-sm-2">
-            Created Date
+            Дата регистрации
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.CreatedDate)
         </dd>
         <dt class="col-sm-2">
-            Updated Date
+            Дата обновления
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contact.UpdatedDate)
@@ -85,10 +85,10 @@
     </dl>
 </div>
 <div>
-    <h4>Related Activities</h4>
+    <h4>Сопутствующая деятельность</h4>
     <div>
         <p>
-            <a asp-controller="Activities" asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+            <a asp-controller="Activities" asp-action="Create" class="btn btn-primary btn-sm">Добавить</a>
         </p>
     </div>
     <hr />
@@ -96,16 +96,16 @@
         <thead>
             <tr>
                 <th>
-                    <a>Name</a>
+                    <a>Название</a>
                 </th>
                 <th>
-                    <a>Type</a>
+                    <a>Тип</a>
                 </th>
                 <th>
-                    <a>Start Date</a>
+                    <a>Дата начала</a>
                 </th>
                 <th>
-                    <a>End Date</a>
+                    <a>Дата окончания</a>
                 </th>
                 <th></th>
             </tr>
@@ -127,8 +127,8 @@
                         @Html.DisplayFor(modelItem => item.EndDate)
                     </td>
                     <td>
-                        <a asp-controller="Activities" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a> |
-                        <a asp-controller="Activities" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                        <a asp-controller="Activities" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a> |
+                        <a asp-controller="Activities" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
                     </td>
                 </tr>
             }

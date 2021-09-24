@@ -5,33 +5,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Edit Score Rule</h4>
+<h4>Редактирование правила оценки</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Criteria" class="control-label"></label>
+                <label asp-for="Criteria" class="control-label">Критерий</label>
                 <select asp-for="Criteria" class="form-control" asp-items="Html.GetEnumSelectList<FormScoreRuleViewModel.RuleCriteria>()">
-                    <option selected="selected" value="">---Select Criteria---</option>
+                    <option selected="selected" value="">---Выберите, пожалуйста---</option>
                 </select>
                 <span asp-validation-for="Criteria" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RelationSymbol" class="control-label"></label>
+                <label asp-for="RelationSymbol" class="control-label">Отношение</label>
                 <select asp-for="RelationSymbol" class="form-control" asp-items="Html.GetEnumSelectList<FormScoreRuleViewModel.ScoreRelationSymbol>()">
-                    <option selected="selected" value="">---Select Relation---</option>
+                    <option selected="selected" value="">---Выберите, пожалуйста---</option>
                 </select>
                 <span asp-validation-for="RelationSymbol" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
+                <label asp-for="Value" class="control-label">Ценность</label>
                 <input asp-for="Value" class="form-control" />
                 <span asp-validation-for="Value" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Points" class="control-label"></label>
+                <label asp-for="Points" class="control-label">Количество пунктов</label>
                 <input asp-for="Points" class="form-control" />
                 <span asp-validation-for="Points" class="text-danger"></span>
             </div>
@@ -39,7 +39,7 @@
             <input type="hidden" asp-for="CreatedDate" />
             <input type="hidden" asp-for="UpdatedDate" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>

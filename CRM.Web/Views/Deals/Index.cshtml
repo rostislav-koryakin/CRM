@@ -8,21 +8,21 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Название</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TotalAmountSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Total Amount</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TotalAmountSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Общая суммаt</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["StageSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Stage</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["StageSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Стадия</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ContactSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Contact</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ContactSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Контакт</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CompanySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Company</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CompanySortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Компания</a>
             </th>
-            <th></th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
@@ -45,7 +45,7 @@
                     @Html.DisplayFor(modelItem => item.Company.Name)
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
                 </td>
             </tr>
         }

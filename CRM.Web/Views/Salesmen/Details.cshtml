@@ -9,31 +9,31 @@
     <div class="button-panel">
         <h3>@Html.DisplayFor(model => model.Salesman.FirstName) @Html.DisplayFor(model => model.Salesman.LastName)</h3>
         <p>
-            <a asp-action="Edit" asp-route-id="@Model.Salesman.Id" class="btn btn-primary btn-sm">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Salesman.Id" class="btn btn-primary btn-sm">Редактировать</a>
         </p>
         <p>
-            <a asp-action="Create" class="btn btn-primary btn-sm">Create</a>
+            <a asp-action="Create" class="btn btn-primary btn-sm">Создать</a>
         </p>
         <p>
-            <a asp-action="Delete" asp-route-id="@Model.Salesman.Id" class="btn btn-primary btn-sm">Delete</a>
+            <a asp-action="Delete" asp-route-id="@Model.Salesman.Id" class="btn btn-primary btn-sm">Удалить</a>
         </p>
     </div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            First Name
+            Имя
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salesman.FirstName)
         </dd>
         <dt class="col-sm-2">
-            Last Name
+            Фамилия
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salesman.LastName)
         </dd>
         <dt class="col-sm-2">
-            Phone
+            Номер мобильного телефона
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salesman.Phone)
@@ -45,19 +45,19 @@
             @Html.DisplayFor(model => model.Salesman.Email)
         </dd>
         <dt class="col-sm-2">
-            Monthly Sales Goal
+            Ежемесячная цель продаж
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salesman.MonthlySalesGoal)
         </dd>
         <dt class="col-sm-2">
-            Created Date
+            Дата регистрации
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salesman.CreatedDate)
         </dd>
         <dt class="col-sm-2">
-            Updated Date
+            Дата обновления
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Salesman.UpdatedDate)
@@ -65,10 +65,10 @@
     </dl>
 </div>
 <div>
-    <h4>Related Activities</h4>
+    <h4>Сопутствующая деятельность</h4>
     <div>
         <p>
-            <a asp-controller="Activities" asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+            <a asp-controller="Activities" asp-action="Create" class="btn btn-primary btn-sm">Добавить</a>
         </p>
     </div>
     <hr />
@@ -76,16 +76,16 @@
         <thead>
             <tr>
                 <th>
-                    <a>Name</a>
+                    <a>Название</a>
                 </th>
                 <th>
-                    <a>Type</a>
+                    <a>Род деятельности</a>
                 </th>
                 <th>
-                    <a>Start Date</a>
+                    <a>Дата начала</a>
                 </th>
                 <th>
-                    <a>End Date</a>
+                    <a>Дата окончания</a>
                 </th>
                 <th></th>
             </tr>
@@ -107,8 +107,8 @@
                         @Html.DisplayFor(modelItem => item.EndDate)
                     </td>
                     <td>
-                        <a asp-controller="Activities" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Edit</a> |
-                        <a asp-controller="Activities" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                        <a asp-controller="Activities" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-default">Редактировать</a> |
+                        <a asp-controller="Activities" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-default">Удалить</a>
                     </td>
                 </tr>
             }
@@ -116,10 +116,10 @@
     </table>
 </div>
 <div>
-    <h4>Related Deals</h4>
+    <h4>Сопутствующие сделки</h4>
     <div>
         <p>
-            <a asp-controller="Deals" asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+            <a asp-controller="Deals" asp-action="Create" class="btn btn-primary btn-sm">Добавить</a>
         </p>
     </div>
     <hr />
@@ -127,16 +127,16 @@
         <thead>
             <tr>
                 <th>
-                    <a>Name</a>
+                    <a>Название</a>
                 </th>
                 <th>
-                    <a>Stage</a>
+                    <a>Стадия</a>
                 </th>
                 <th>
-                    <a>Total Amount</a>
+                    <a>Общая сумма</a>
                 </th>
                 <th>
-                    <a>Closing Date</a>
+                    <a>Дата совершения</a>
                 </th>
                 <th></th>
             </tr>

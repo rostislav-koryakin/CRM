@@ -5,34 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Edit Salesman</h4>
+<h4>Редактирование данных</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
+                <label asp-for="FirstName" class="control-label">Имя</label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
+                <label asp-for="LastName" class="control-label">Фамилия</label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
+                <label asp-for="Phone" class="control-label">Номер мобильного телефона</label>
                 <input asp-for="Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">Email</label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MonthlySalesGoal" class="control-label"></label>
+                <label asp-for="MonthlySalesGoal" class="control-label">Ежемесячная цель продаж</label>
                 <input asp-for="MonthlySalesGoal" class="form-control" />
                 <span asp-validation-for="MonthlySalesGoal" class="text-danger"></span>
             </div>
@@ -40,7 +40,7 @@
             <input type="hidden" asp-for="CreatedDate" />
             <input type="hidden" asp-for="UpdatedDate" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>

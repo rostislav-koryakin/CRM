@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,28 +19,28 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Salesmen" asp-action="Index">Salesmen</a>
+                            <a class="nav-link" asp-area="" asp-controller="Salesmen" asp-action="Index">Продавцы</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Contacts</a>
+                            <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Контакты</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+                            <a class="nav-link" asp-area="" asp-controller="Companies" asp-action="Index">Компании</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Activities</a>
+                            <a class="nav-link" asp-area="" asp-controller="Activities" asp-action="Index">Деятельность</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                            <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Продукты</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Deals" asp-action="Index">Deals</a>
+                            <a class="nav-link" asp-area="" asp-controller="Deals" asp-action="Index">Сделки</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="ScoreRules" asp-action="Index">Score Rules</a>
+                            <a class="nav-link" asp-area="" asp-controller="ScoreRules" asp-action="Index">Правила оценки</a>
                         </li>
                     </ul>
                 </div>
@@ -52,12 +52,12 @@
             <form asp-action="Index" method="get">
                 <div id="sub-nav" class="form-actions no-color">
                     <p>
-                        <a asp-action="Create" class="btn btn-primary btn-sm">Create New</a>
+                        <a asp-action="Create" class="btn btn-primary btn-sm">Добавить запись</a>
                     </p>
                     <p>
-                        Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                        <input type="submit" value="Search" class="btn btn-primary btn-sm" />
-                        <a asp-action="Index" class="btn btn-primary btn-sm">Back to Full List</a>
+                        Поиск: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                        <input type="submit" value="Поиск" class="btn btn-primary btn-sm" />
+                        <a asp-action="Index" class="btn btn-primary btn-sm">Назад к списку</a>
                     </p>
                 </div>
             </form>
@@ -72,14 +72,14 @@
                asp-route-pageNumber="@(Model.PageIndex - 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                class="btn btn-primary btn-sm @prevDisabled">
-                Previous
+                Предыдущий
             </a>
             <a asp-action="Index"
                asp-route-sortOrder="@ViewData["CurrentSort"]"
                asp-route-pageNumber="@(Model.PageIndex + 1)"
                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                class="btn btn-primary btn-sm @nextDisabled">
-                Next
+                Следующий
             </a>
         </main>
     </div>

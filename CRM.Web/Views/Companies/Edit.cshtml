@@ -5,61 +5,61 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Edit Company</h4>
+<h4>Редактировать данные компнании</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TaxpayerNumber" class="control-label"></label>
+                <label asp-for="TaxpayerNumber" class="control-label">Налоговый номер</label>
                 <input asp-for="TaxpayerNumber" class="form-control" />
                 <span asp-validation-for="TaxpayerNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название компании</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Website" class="control-label"></label>
+                <label asp-for="Website" class="control-label">Веб-сайт</label>
                 <input asp-for="Website" class="form-control" />
                 <span asp-validation-for="Website" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NoOfEmployees" class="control-label"></label>
+                <label asp-for="NoOfEmployees" class="control-label">Количество сотрудников</label>
                 <input asp-for="NoOfEmployees" class="form-control" />
                 <span asp-validation-for="NoOfEmployees" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Industry" class="control-label"></label>
+                <label asp-for="Industry" class="control-label">Род деятельности</label>
                 <select asp-for="Industry" class="form-control" asp-items="Html.GetEnumSelectList<FormCompanyViewModel.Industries>()">
-                    <option selected="selected" value="">---Please select---</option>
+                    <option selected="selected" value="">---Выберите, пожалуйста---</option>
                 </select>
                 <span asp-validation-for="Industry" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
+                <label asp-for="Country" class="control-label">Страна</label>
                 <input asp-for="Country" class="form-control" />
                 <span asp-validation-for="Country" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
+                <label asp-for="City" class="control-label">Город</label>
                 <input asp-for="City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Street" class="control-label"></label>
+                <label asp-for="Street" class="control-label">Улица</label>
                 <input asp-for="Street" class="form-control" />
                 <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ZipCode" class="control-label"></label>
+                <label asp-for="ZipCode" class="control-label">Индекс</label>
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Score" class="control-label"></label>
+                <label asp-for="Score" class="control-label">Счёт</label>
                 <input asp-for="Score" class="form-control" />
                 <span asp-validation-for="Score" class="text-danger"></span>
             </div>
@@ -67,7 +67,7 @@
             <input type="hidden" asp-for="CreatedDate" />
             <input type="hidden" asp-for="UpdatedDate" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>

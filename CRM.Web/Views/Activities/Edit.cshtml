@@ -5,45 +5,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h4>Edit Activity</h4>
+<h4>Редактировать деятельность</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
+                <label asp-for="Description" class="control-label">Описание</label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
+                <label asp-for="StartDate" class="control-label">Дата начала</label>
                 <input asp-for="StartDate" class="form-control" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
+                <label asp-for="EndDate" class="control-label">Дата окончания</label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
+                <label asp-for="Type" class="control-label">Род деятельности</label>
                 <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<FormActivityViewModel.ActivityType>()">
                 </select>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ContactId" class="control-label"></label>
+                <label asp-for="ContactId" class="control-label">Контакт</label>
                 <select asp-for="ContactId" class="form-control" asp-items="ViewBag.ContactId"></select>
                 <span asp-validation-for="ContactId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalesmanId" class="control-label"></label>
+                <label asp-for="SalesmanId" class="control-label">Продавец</label>
                 <select asp-for="SalesmanId" class="form-control" asp-items="ViewBag.SalesmanId"></select>
                 <span asp-validation-for="SalesmanId" class="text-danger"></span>
             </div>
@@ -51,7 +51,7 @@
             <input type="hidden" asp-for="CreatedDate" />
             <input type="hidden" asp-for="UpdatedDate" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
